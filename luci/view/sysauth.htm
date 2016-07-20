@@ -1,0 +1,56 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008-2012 Jo-Philipp Wich <xm@subsignal.org>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+-%>
+
+<%+header%>
+
+
+<div class="haier1_header">
+    <img class="haier1_logo_01" src="/luci-static/images/haier1_logo_01.png" alt="&#x6D77;&#x5C14;logo"/>
+    <p style="color: #fff;">&#x6B22;&#x8FCE;&#x4F7F;&#x7528;&#x667A;&#x80FD;&#x4E91;&#x8DEF;&#x7531;&#x5668;</p>
+</div>
+<div class="haier1_form_box">
+    <form class="haier1_form"  method="post" action="<%=pcdata(luci.http.getenv("REQUEST_URI"))%>">
+    <p style="color: #266883;">&#x7BA1;&#x7406;&#x5BC6;&#x7801;</p>
+    <div class="haier1_input_group">
+        <input type="text" style="display: none;" name="username" value="<%=duser%>"/>
+        <input class="haier1_pw" type="password" placeholder="&#x8BF7;&#x8F93;&#x5165;&#x5BC6;&#x7801;&#xFF08;&#x9ED8;&#x8BA4;admin&#xFF09;" name="password" /><lable class="haier1_pw_r" id="show_pw">&nbsp;</lable>
+    </div>
+    <br/>
+    <input type="submit" value="<%:Login%>" class="haier1_sbm" style="color: #266883;"/>
+    </form>
+</div>
+<script>
+      $(function(){
+        $("#show_pw").click(function(){
+            var pwType = $(".haier1_pw").attr("type")
+            if(pwType == "password"){
+              $(".haier1_pw").attr("type","text")
+            }else {
+              $(".haier1_pw").attr("type","password")
+            }
+        }
+        );
+
+        $("html").css("background","#004ea2");
+        $("body").css("background","#004ea2");
+         
+      });  
+
+        if (navigator.vendor == "Google Inc.") $("#show_pw").css('line-height','26px');
+        if (navigator.vendor == "Apple Computer, Inc.") $("#show_pw").css('line-height','28px');
+        $(".haier1_pw").width("262px").css('margin-right', '-4px');
+          
+</script>
+
+
+<%+footer%>

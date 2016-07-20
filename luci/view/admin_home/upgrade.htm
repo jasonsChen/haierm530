@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/luci-static/openwrt.org/cascade.css"/>
+    <title></title>
+    <style>
+        .active {
+            background: #266783;
+        }
+        .active a {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="upgrade_wrap container">
+        <div class="haier2_header">
+            <img src="/luci-static/images/haier2_logo.png" alt="logo"/>
+        </div>
+        <div class="haier2_main" style="height: 250px;">
+            <p><span>固件升级</span></p>
+            <div class="border_buttom"></div>
+            <form action="<%=REQUEST_URI%>" enctype="multipart/form-data">
+                <p class="form_p">
+                    *请选择固件升级
+                </p>
+                <div class="haier3_input_group haier8_file_box">
+                        <input class="haier8_input_file" type="file" name="file"/>
+                </div>
+                <div class="haier3_button_group" style="margin-top: 30px;">
+                    <a href="<%=luci.dispatcher.build_url("admin/home/mainpage")%>"><input class="haier3_form_reset" type="button" value="取消"></a><input class="haier3_form_submit" type="submit" value="升级">
+                </div>
+            </form>
+        </div>
+    </div>    
+</body>
+</html>

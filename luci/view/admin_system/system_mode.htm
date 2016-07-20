@@ -1,0 +1,55 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id: systemMode.htm 7798 2011-10-26 23:43:04Z jow $
+
+-%>
+
+<%
+	local ap_client =  nixio.fs.access("/etc/config/ap_client_web")
+	local repeater =  nixio.fs.access("/etc/config/repeater_web")
+	local bridge =  nixio.fs.access("/etc/config/bridge_web")
+-%>
+<form action="<%=luci.dispatcher.build_url("admin/system/ap_join")%>?device=mt7628" method="post">
+<fieldset class="cbi-section">
+	<fieldset class="cbi-section">
+		
+		<label class="cbi-value-title" for="image" style="width:100px"><%:Mode%>:</label>
+		<div class="cbi-value-field">
+		<select name="system_mode" id="system_mode">
+			<% if ap_client then %>
+				<option value="ap_client" selected="selected">Ap Client</option>
+				<option value="repeater">Repeater</option>
+				<option value="bridge">Bridge</option>
+				<option value="router">Router</option>
+			<% elseif repeater then%>
+				<option value="ap_client">Ap Client</option>
+				<option value="repeater" selected="selected">Repeater</option>
+				<option value="bridge">Bridge</option>
+				<option value="router">Router</option>
+			<% elseif bridge then%>
+				<option value="ap_client">Ap Client</option>
+				<option value="repeater" >Repeater</option>
+				<option value="bridge" selected="selected">Bridge</option>
+				<option value="router">Router</option>
+			<% else %>
+				<option value="ap_client">Ap Client</option>
+				<option value="repeater">Repeater</option>
+				<option value="bridge">Bridge</option>
+				<option value="router" selected="selected">Router</option>
+			<% end %>
+		</select>
+		<input class="cbi-button cbi-button-apply"  style="width:60px"  value="<%:Submit%>"  type="submit" />	
+		<label>need to reboot!</label>
+	</div>
+	</fieldset>
+</fieldset>
+</form>

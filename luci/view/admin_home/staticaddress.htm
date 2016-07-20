@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/luci-static/openwrt.org/cascade.css"/>
+    <title></title>
+    <style>
+        #active {
+            background: #266783;
+        }
+        #active a {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="container haier2_wrap">
+    <div class="haier2_header">
+        <img src="/luci-static/images/haier2_logo.png" alt="logo"/>
+    </div>
+    <div class="haier2_main">
+        <p><span>网络设置</span></p>
+        <div class="border_buttom"></div>
+        <ul class="haier4_list">
+            <li><a href="<%=luci.dispatcher.build_url("admin/home/quicksetup")%>">宽带拨号</a></li>
+            <li id="active"><a href="<%=luci.dispatcher.build_url("admin/home/staticaddress")%>">静态IP</a></li>
+            <li><a href="<%=luci.dispatcher.build_url("admin/home/dynamicaddress")%>">动态IP</a></li>
+            <li><a href="<%=luci.dispatcher.build_url("admin/home/reperter")%>">无线中继</a></li>
+        </ul>
+        <div style="clear: both;"></div>
+        <form action="">
+            <p class="form_p">*请输入运营商给您的IP、子网掩码等信息。如有遗忘,可拨打运营商电话找回。</p>
+            <div class="haier3_input_group">
+                <input type="text" placeholder="请输入您的IP地址" />
+                <input type="text" placeholder="请输入您的子网掩码" />
+                <input type="text" placeholder="请输入您的默认网关"/>
+                <input type="text" placeholder="请输入您的DNS（首选）"/>
+            </div>
+            <p class="haier4_form_p form_p"><a href="<%=luci.dispatcher.build_url("admin/home/mainpage")%>"><span>详细配置</span></a></p><div style="clear: both;"></div>
+            <div class="submit_round">
+                <input class="submit_round_main" type="submit" value="确认" />
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

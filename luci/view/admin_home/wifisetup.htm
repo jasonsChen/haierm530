@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/luci-static/openwrt.org/cascade.css"/>
+    <title></title>
+</head>
+<% 
+    local uci = require("luci.model.uci").cursor()
+    local ssid = uci:get_first("wireless","wifi-iface","ssid") or "HappyHome"                                                                              
+    local key = uci:get_first("wireless","wifi-iface","key") 
+%>
+<body>
+    <div class="container haier2_wrap">
+        <div class="haier2_header">
+            <img src="/luci-static/images/haier2_logo.png" alt="logo"/>
+        </div>
+        <div class="haier2_main">
+            <p><span class="haier3_logo">无线设置</span></p>
+            <div class="border_buttom"></div>
+            <p>*请设置您的无线网络信息。注意：为防止无线网络被他人盗用，请设置复杂的无线密码。</p>
+            <form method="POST" action="<%=controller%>/admin/home/wifiSet">
+                <div class="haier3_input_group">
+                <input type="text" placeholder="请输入无线账号" name="ssid_24g" value="<%=ssid%>" id="ssid_24g">
+                <p></p>
+                <input type="text" placeholder="请输入无线密码" name="key_24g" id="key_24g" value="<%=key%>">
+                </div>
+                <p>*无线账号不能为空，重启路由器后设置生效</p>
+                <div class="border_buttom"></div>
+                <div class="haier3_button_group">
+                    <input class="haier3_form_submit" type="submit" value="确认"><a href="<%=luci.dispatcher.build_url("admin/home/mainpage")%>"><input class="haier3_form_reset" type="button" value="取消"></a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/luci-static/openwrt.org/cascade.css"/>
+    <script src="/luci-static/openwrt.org/jquery-3.0.0.js"></script>
+    <title></title>
+    <style>
+      .haier2_menu_list1>.haier2_menu_list1_a1{
+        color: #fff;
+      }
+    </style>
+</head>
+
+<% 
+  require "luci.tools.status"
+  require "luci.version"
+
+  local uci = require("luci.model.uci").cursor()
+
+  local ntm = require "luci.model.network".init()
+  local wan = ntm:get_wannet()
+  local wanip = nil
+  if wan then
+    wanip = wan:ipaddr()
+  end
+  local lanipaddr = uci:get("network","lan","ipaddr")
+
+  local version = luci.version.luciversion
+
+  local linkstatus
+  if wanip then
+    linkstatus = "连接正常"
+  else
+    linkstatus = "连接异常"
+  end
+%>
+
+<body>
+  <div class="container haier2_wrap">
+    <div class="haier2_header">
+      <img src="/luci-static/images/haier2_logo.png" alt="logo"/>
+    </div>
+    <div class="haier2_main">
+        <div class="haier2_information">
+          <div class="haier2_information_logo">
+            <img src="/luci-static/images/haier2_information_logo.png" alt="logo"/>
+          </div>
+          <div class="haier2_information_list">
+            <ul style="float: left;">
+              <li>&#x8DEF;&#x7531;&#x5668;&#x7248;&#x672C;&#xFF1A;<%=version%></li>
+              <li>&#x672C;&#x673A;IP&#x5730;&#x5740;&#xFF1A;<%=lanipaddr%></li>
+              <li>&#x5916;&#x7F51;&#x5730;&#x5740;&#xFF1A;<%=wanip%></li>
+              <li>&#x8DEF;&#x7531;&#x5668;&#x72B6;&#x6001;&#xFF1A;<%=linkstatus%></li>
+            </ul>
+          </div>
+        </div>
+        <div class="border_buttom" style="margin-bottom:3px;"></div>
+        <div class="haier2_menu">
+          <ul id="listUL">
+            <li class="haier2_menu_list1"><a class="haier2_menu_list1_a1" href="javascript:;">&nbsp;&nbsp;网络设置</a><a href="javascript:;" class="haier2_menu_list1_a2">&nbsp;&nbsp;设备管理</a></li>
+            <li class="haier2_menu_list2"><a data-indexo href="<%=luci.dispatcher.build_url("admin/home/wifisetup")%>">&nbsp;无线设置</a></li>
+            <li class="haier2_menu_list2"><a href="<%=luci.dispatcher.build_url("admin/home/dynamicaddress")%>">&nbsp;上网设置</a></li>
+            <li class="haier2_menu_list2"><a href="<%=luci.dispatcher.build_url("admin/home/lanip")%>">&nbsp;本地设置</a></li>
+            <li class="haier2_menu_list2"><a href="<%=luci.dispatcher.build_url("admin/home/phoneonline")%>">&nbsp;在线终端</a></li>
+            <li class="haier2_menu_list2"><a href="<%=luci.dispatcher.build_url("admin")%>">&nbsp;快速设置</a></li>
+            <!-- <li class="haier2_menu_list2"><a href="#">&nbsp;&nbsp;&nbsp;&#x6062;&#x590D;&#x51FA;&#x5382;</a></li> -->
+          </ul>
+          <script>
+            (function () {
+              var oLis=document.getElementsByClassName("haier2_menu_list2")
+              for(var i= 0;i<oLis.length;i++) {
+                oLis[i].style.backgroundImage="url(/luci-static/images/haier2_menu_list2_bg"+(i+1)+".png)";
+              }
+            })();
+            $(function (){
+              $("#listUL .haier2_menu_list1_a1").click(function() {//点击后切换选项卡的状态
+                anim(1);
+                $(this).css({
+                  background: 'url(/luci-static/images/haier2_menu_list1_a1_bg.png)',
+                  backgroundSize: '100% 100%',
+                  color: '#fff'
+                });
+                $("#listUL .haier2_menu_list1_a2").css({
+                  background: 'url(/luci-static/images/haier2_menu_list1_a2_bg.png)',
+                  backgroundSize: '100% 100%',
+                  color: '#266883'
+                });
+              });
+              $("#listUL .haier2_menu_list1_a2").click(function() {
+                anim(-1);
+                $(this).css({
+                  background: 'url(/luci-static/images/haier2_menu_list1_a2_bg_l.png)',
+                  backgroundSize: '100% 100%',
+                  color: '#fff'
+                });
+                $("#listUL .haier2_menu_list1_a1").css({
+                  background: 'url(/luci-static/images/haier2_menu_list1_a1_bg_l.png)',
+                  backgroundSize: '100% 100%',
+                  color: '#266883'
+                });
+              });
+            });
+            function anim(e) {
+                var strArr1 = ["无线设置","上网设置","本地设置","在线终端","快速设置"],
+                    strArr2 = ["修改密码","固件升级","重启设备","恢复出厂","退出登录"];
+                var aUrl1 = ["<%=luci.dispatcher.build_url("admin/home/wifisetup")%>","<%=luci.dispatcher.build_url("admin/home/dynamicaddress")%>","<%=luci.dispatcher.build_url("admin/home/lanip")%>","<%=luci.dispatcher.build_url("admin/home/phoneonline")%>","<%=luci.dispatcher.build_url("admin")%>"],
+                    aUrl2 = ["<%=luci.dispatcher.build_url("admin/home/setpassword")%>","<%=luci.dispatcher.build_url("admin/home/upgrade")%>","#","#","/cgi-bin/luci"];                
+                $("#listUL .haier2_menu_list2").each(function(i){
+                  valWidth = $(this).width()*e;
+                  $(this).animate({
+                    left: valWidth+5+"px",
+                    },
+                    500+i*30,
+                    function() {
+                      $(this).animate({
+                        left: "0",
+                        },
+                        500-i*30, 
+                        function() {
+
+                      })
+                      if (e==1) {
+                        $(this).children().text(strArr1[i]).attr('href', aUrl1[i]);
+                        $('#listUL .haier2_menu_list2').data('index', 1);
+                      }else {
+                        $(this).children().text(strArr2[i]).attr('href', aUrl2[i]);
+                        $('#listUL .haier2_menu_list2').data('index', 2);
+                      }
+                  });
+                });
+            }
+            $("#listUL .haier2_menu_list2:eq(2)").click(function() {
+              if ($(this).data('index') == 2) {
+                if(confirm("重启设备将需要60s左右的时间,请确认是否要重启:")) $.get("<%=luci.dispatcher.build_url("admin/home/Reboot")%>")
+                return false;
+              };
+            });
+          </script>
+        </div>
+    </div>
+  </div>
+</body>
+</html>
