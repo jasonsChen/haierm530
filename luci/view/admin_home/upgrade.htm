@@ -23,12 +23,12 @@
         <div class="haier2_main" style="height: 250px;">
             <p><span>固件升级</span></p>
             <div class="border_buttom"></div>
-            <form action="<%=REQUEST_URI%>" enctype="multipart/form-data">
+            <form method="post" action="<%=luci.dispatcher.build_url("admin/system/flashops")%>" enctype="multipart/form-data">
                 <p class="form_p">
                     *请选择固件升级
                 </p>
                 <div class="haier3_input_group haier8_file_box">
-                        <input class="haier8_input_file" type="file" name="file"/>
+                    <input class="haier8_input_file" type="file" name="image"/>
                 </div>
                 <div class="haier3_button_group" style="margin-top: 30px;">
                     <a href="<%=luci.dispatcher.build_url("admin/home/mainpage")%>"><input class="haier3_form_reset" type="button" value="取消"></a><input class="haier3_form_submit" type="submit" value="升级">
