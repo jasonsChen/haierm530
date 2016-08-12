@@ -1,0 +1,295 @@
+@charset "utf-8";
+
+html {width: 100%;height: 100%;min-height:660px;position: relative;}
+body {
+    min-height: 100%;
+}
+html,body,div,img,a,input,a,ul,li {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    color: #266883;
+}
+a:link {text-decoration: none;}
+a:visited {text-decoration: none;}
+a:hover {text-decoration: none;}
+a:active {text-decoration: none;font-size: 14px;font-weight: bold;}
+body {
+    background: url("../images/haier2_body_bg.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
+}
+.container {
+    margin: 0 auto;
+    width: 900px;
+}
+.border_buttom { 
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #55879d;
+}
+.haier1_logo_01 {
+    width: 220px;
+}
+.haier1_header {
+    text-align: center;
+    margin-top: 110px;
+    padding: 10px 0;
+}
+.haier1_header p {
+    margin-top: 10px;
+}
+.haier1_form_box {
+    width: 330px;
+    margin: 20px auto 50px;
+    background: #d2d4db;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.haier1_form_box p {
+    margin-bottom: 10px;
+}
+.haier1_form_box input {
+    margin: 10px 0;
+    background-color:rgba(0,0,0,0);
+    border-left: 1px solid #b4c5d0;
+    border-top: 1px solid #b4c5d0;
+    border-bottom: 1px solid #b4c5d0;
+}
+.haier1_pw {
+    width: 258px;
+    height: 30px;
+    text-indent: 42px;
+    background: #dfe0e7;
+    background-image: url("../images/haier1_form_img.png");
+    background-position: left center;
+    background-repeat: no-repeat;
+}
+.haier1_input_group {
+    vertical-align: center;
+    line-height: 29px;
+    line-height: 30px\0;
+}
+@-moz-document url-prefix() {
+    .haier1_input_group {
+        line-height: 30px;
+    }
+}
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .haier1_input_group {
+        line-height: 26px;
+    }
+}
+.haier1_pw_r {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background-image: url("../images/haier1_02_03.png");
+    background-color: #d2d4db;
+    border-right: 1px solid #b4c5d0;
+    border-top: 1px solid #b4c5d0;
+    border-bottom: 1px solid #b4c5d0;
+}
+.haier1_form {
+    width: 300px;
+    margin: 10px auto;
+
+}
+.haier1_sbm {
+    width: 288px;
+    height: 30px;
+    border-right: 1px solid #b4c5d0;
+}
+
+.haier2_wrap {
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);		/* IE 9 */
+    -webkit-transform: translate(-50%,-50%);	/* Safari and Chrome */
+    -o-transform: translate(-50%,-50%);		/*Opera */
+    -moz-transform: translate(-50%,-50%);
+}
+
+
+.haier2_header {
+	padding: 20px;
+}
+.haier2_main {
+	position: relative;
+	background: url("../images/haier2_wrap_bg-pc.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
+    height: 465px;
+    padding: 22px;	
+
+}
+.haier2_main>p {
+	width: 300px;
+	line-height: 50px;
+	text-align: center;
+}
+.haier2_main>div{
+	width: 300px;
+}
+.haier2_main>ul {
+	width: 300px;
+	padding-top: 20px;
+	list-style: none;
+}
+.haier2_main>ul>li {
+	margin: 15px;
+	text-align: center;
+	border: 1px solid #abbdc9;
+	line-height: 35px;
+}
+.haier2_main>ul>li>a {
+	display: block;
+}
+.haier2_main>form {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 500px;
+	height: 410px;
+	border-left: 2px solid #fff;
+	margin-top: 30px; 
+	padding: 20px 30px;
+}
+.haier3_input_group {
+    padding-left: 10px;
+}
+.haier3_input_group>input,
+ .haier3_input_group>.input {
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    margin-top: 10px;
+    border: 1px solid #55879d;
+    background: none;
+    padding-left: 10px;
+    margin-left: -10px;
+}
+.haier3_form_submit{
+    width: 45%;
+    height: 30px;
+    margin-top: 10px;
+    border: 1px solid #55879d;
+    background: none;
+    color: #55879d;
+}
+.haier3_form_reset {
+    float: right;
+    width: 45%;
+    height: 30px;
+    margin-top: 10px;
+    border: 1px solid #55879d;
+    background: none;
+    color: #55879d;
+}
+.form_p {
+    font-size: 15px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+.haier4_form_p {
+    float: right;
+}
+
+.submit_round_main{
+    display: block;
+    width: 50px;
+    height: 50px;
+    margin: 10px auto;
+    border-top: 2px solid #acbdcd;
+    border-bottom: 2px solid #acbdcd;
+    border-radius: 25px;
+    text-align: center;
+    background: none;
+}
+#setZhongji {
+	cursor: pointer;
+}
+.haier2_information_logo {
+	text-align: center;
+	margin: 20px 0;
+}
+.haier2_information_list>ul {
+	margin: 20px;
+}
+.haier2_information_list>ul>li {
+	margin: 20px;
+	list-style: none;
+}
+.haier2_menu ul {
+    width: 100%;
+    padding-left: 0;
+    overflow: hidden;
+}
+.haier2_menu ul li {
+    list-style-type: none;
+    width: 95%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.haier2_menu ul li a {
+    line-height: 40px;
+}
+.haier2_main>div.haier2_menu {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 500px;
+	height: 410px;
+	border-left: 2px solid #fff;
+	margin-top: 30px; 
+	padding: 20px 30px;
+
+}
+.haier2_menu ul li .haier2_menu_list1_a1 {
+    display: inline-block;
+    width: 45%;
+    height: 35px;
+    line-height: 35px;
+    background: url("../images/haier2_menu_list1_a1_bg.png");
+    background-size: 100% 100%;
+    margin-bottom: 30px; 
+}
+.haier2_menu ul li .haier2_menu_list1_a2 {
+    display: inline-block;
+    width: 55%;
+    height: 35px;
+    line-height: 35px;
+    background: url("../images/haier2_menu_list1_a2_bg.png");
+    background-size: 100% 100%;
+     margin-bottom: 30px; 
+}
+.haier2_menu_list2 {
+    box-sizing: border-box;
+    position: relative;
+    border: 1px solid #266883;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: left center;
+}
+.haier2_menu_list2 a {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+.haier2_main>form#updataForm {
+    height: 190px;
+}
+.upgrade_wrap {
+    margin-top: 100px;
+}
+#wifiName {
+    display: inline-block;
+    min-width:52%;height:30px;
+    border:1px solid #55879d;
+    background: none;
+}

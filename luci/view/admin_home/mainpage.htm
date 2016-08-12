@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
-    <link rel="stylesheet" href="/luci-static/openwrt.org/cascade.css"/>
+    <link rel="stylesheet" media="screen and (max-width: 800px)" href="/luci-static/openwrt.org/cascade.css"/>
+    <link rel="stylesheet" media="screen and (min-width: 800px)" href="/luci-static/openwrt.org/cascadepc.css"/>
     <script src="/luci-static/openwrt.org/jquery-3.0.0.js"></script>
     <title></title>
     <style>
@@ -36,6 +37,18 @@
   else
     linkstatus = "连接异常"
   end
+
+  local wan_mode = uci:get("network","wan","mode") or "dhcp"
+  local wan_url = ""
+  if wan_mode == "dhcp" then
+    wan_url = luci.dispatcher.build_url("admin/home/dhcpset")
+  elseif wan_mode == "static" then
+    wan_url = luci.dispatcher.build_url("admin/home/staticset")
+  elseif wan_mode == "ap_client" then
+    wan_url = luci.dispatcher.build_url("admin/home/repset")
+  else
+    wan_url = luci.dispatcher.build_url("admin/home/pppoeset")
+  end
 %>
 
 <body>
@@ -62,19 +75,22 @@
           <ul id="listUL">
             <li class="haier2_menu_list1"><a class="haier2_menu_list1_a1" href="javascript:;">&nbsp;&nbsp;网络设置</a><a href="javascript:;" class="haier2_menu_list1_a2">&nbsp;&nbsp;设备管理</a></li>
             <li class="haier2_menu_list2"><a data-indexo href="<%=luci.dispatcher.build_url("admin/home/wifisetup")%>">&nbsp;无线设置</a></li>
-            <li class="haier2_menu_list2"><a href="<%=luci.dispatcher.build_url("admin/home/dynamicaddress")%>">&nbsp;上网设置</a></li>
+            <li class="haier2_menu_list2"><a href="<%=wan_url%>">&nbsp;上网设置</a></li>
             <li class="haier2_menu_list2"><a href="<%=luci.dispatcher.build_url("admin/home/lanip")%>">&nbsp;本地设置</a></li>
             <li class="haier2_menu_list2"><a href="<%=luci.dispatcher.build_url("admin/home/phoneonline")%>">&nbsp;在线终端</a></li>
             <li class="haier2_menu_list2"><a href="<%=luci.dispatcher.build_url("admin")%>">&nbsp;快速设置</a></li>
-            <!-- <li class="haier2_menu_list2"><a href="#">&nbsp;&nbsp;&nbsp;&#x6062;&#x590D;&#x51FA;&#x5382;</a></li> -->
           </ul>
-          <script>
-            (function () {
+        </div>
+    </div>
+  </div>
+  <script>
+            function setBackImg(a) {
               var oLis=document.getElementsByClassName("haier2_menu_list2")
               for(var i= 0;i<oLis.length;i++) {
-                oLis[i].style.backgroundImage="url(/luci-static/images/haier2_menu_list2_bg"+(i+1)+".png)";
+                oLis[i].style.backgroundImage="url(/luci-static/images/haier2_menu_list2_bg"+(i+1)+ a +".png)";
               }
-            })();
+            }
+            setBackImg("");
             $(function (){
               $("#listUL .haier2_menu_list1_a1").click(function() {//点击后切换选项卡的状态
                 anim(1);
@@ -106,7 +122,7 @@
             function anim(e) {
                 var strArr1 = ["无线设置","上网设置","本地设置","在线终端","快速设置"],
                     strArr2 = ["修改密码","固件升级","重启设备","恢复出厂","退出登录"];
-                var aUrl1 = ["<%=luci.dispatcher.build_url("admin/home/wifisetup")%>","<%=luci.dispatcher.build_url("admin/home/dynamicaddress")%>","<%=luci.dispatcher.build_url("admin/home/lanip")%>","<%=luci.dispatcher.build_url("admin/home/phoneonline")%>","<%=luci.dispatcher.build_url("admin")%>"],
+                var aUrl1 = ["<%=luci.dispatcher.build_url("admin/home/wifisetup")%>","<%=wan_url%>","<%=luci.dispatcher.build_url("admin/home/lanip")%>","<%=luci.dispatcher.build_url("admin/home/phoneonline")%>","<%=luci.dispatcher.build_url("admin")%>"],
                     aUrl2 = ["<%=luci.dispatcher.build_url("admin/home/setpassword")%>","<%=luci.dispatcher.build_url("admin/home/upgrade")%>","#","#","/cgi-bin/luci"];                
                 $("#listUL .haier2_menu_list2").each(function(i){
                   valWidth = $(this).width()*e;
@@ -125,22 +141,40 @@
                       if (e==1) {
                         $(this).children().text(strArr1[i]).attr('href', aUrl1[i]);
                         $('#listUL .haier2_menu_list2').data('index', 1);
+                        setBackImg("");
                       }else {
                         $(this).children().text(strArr2[i]).attr('href', aUrl2[i]);
                         $('#listUL .haier2_menu_list2').data('index', 2);
+                        setBackImg("-n");
                       }
                   });
                 });
             }
             $("#listUL .haier2_menu_list2:eq(2)").click(function() {
-              if ($(this).data('index') == 2) {
-                if(confirm("重启设备将需要60s左右的时间,请确认是否要重启:")) $.get("<%=luci.dispatcher.build_url("admin/home/Reboot")%>")
+                if(confirm("重启设备将需要60s左右的时间,请确认是否要重启:")) {
+                  $.get("<%=luci.dispatcher.build_url("admin/home/Reboot")%>")
+                  setTimeout(checkUp, 1*50*1000)
+                }
                 return false;
-              };
             });
-          </script>
-        </div>
-    </div>
-  </div>
+            $("#listUL .haier2_menu_list2:eq(3)").click(function() {
+                if(confirm("恢复出厂将需要2分钟左右的时间,请确认是否要重启:")) {
+                  $.get("<%=luci.dispatcher.build_url("admin/home/ResetFactory")%>")
+                  setTimeout(checkUp, 2*50*1000)
+                }
+                return false;
+            });
+            function checkUp() { //检查是否重启完成若没有完成1秒钟之后再次检查,若完成跳转到登录页面
+              var timer=null;
+              clearTimeout(timer);
+              $.get('http://192.168.88.1/cgi-bin/luci', function(a,b,xhr) {  
+                  if (xhr.status == 200 ) {
+                      window.location.href = "http://192.168.88.1/cgi-bin/luci"
+                  }else {
+                      timer = setTimeout(checkUp, 2000)
+                  }
+              });
+            }
+    </script>
 </body>
 </html>

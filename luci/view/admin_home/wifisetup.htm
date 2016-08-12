@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
-    <link rel="stylesheet" href="/luci-static/openwrt.org/cascade.css"/>
+    <link rel="stylesheet" media="screen and (max-width: 800px)" href="/luci-static/openwrt.org/cascade.css"/>
+    <link rel="stylesheet" media="screen and (min-width: 800px)" href="/luci-static/openwrt.org/cascadepc.css"/>
     <title></title>
 </head>
 <% 
@@ -21,19 +22,67 @@
             <p><span class="haier3_logo">无线设置</span></p>
             <div class="border_buttom"></div>
             <p>*请设置您的无线网络信息。注意：为防止无线网络被他人盗用，请设置复杂的无线密码。</p>
-            <form method="POST" action="<%=controller%>/admin/home/wifiSet">
+            <form>
                 <div class="haier3_input_group">
-                <input type="text" placeholder="请输入无线账号" name="ssid_24g" value="<%=ssid%>" id="ssid_24g">
+                <label class="input" style="display: inline-block;border:none;padding-left:0;"><span style='width:70px;font-size:14px;display:inline-block;'>无线账号</span><input style="display: inline-block;min-width:52%;height:30px;border:1px solid #55879d;background:none;padding-left:10px;" type="text" required maxlength='32' placeholder="请输入无线账号" name="ssid_24g" value="<%=ssid%>" id="ssid_24g"></label>
                 <p></p>
-                <input type="text" placeholder="请输入无线密码" name="key_24g" id="key_24g" value="<%=key%>">
-                </div>
+                <label class="input" style="display: inline-block;border:none;padding-left:0;"><span style='width:70px;font-size:14px;display:inline-block;'>无线密码</span><input style="display: inline-block;min-width:52%;height:30px;border:1px solid #55879d;background:none;padding-left:10px;" type="text" required minlength='8' maxlength='32' placeholder="请输入无线密码" name="key_24g" id="key_24g" value="<%=key%>">
+                </div></label>
                 <p>*无线账号不能为空，重启路由器后设置生效</p>
                 <div class="border_buttom"></div>
                 <div class="haier3_button_group">
-                    <input class="haier3_form_submit" type="submit" value="确认"><a href="<%=luci.dispatcher.build_url("admin/home/mainpage")%>"><input class="haier3_form_reset" type="button" value="取消"></a>
+                    <input id='subSetwifi' class="haier3_form_submit" type="button" value="确认"><a href="<%=luci.dispatcher.build_url("admin/home/mainpage")%>"><input class="haier3_form_reset" type="button" value="取消"></a>
                 </div>
             </form>
+            <p><span id = 'textTip'></span></p>
         </div>
     </div>
+    <script src="/luci-static/openwrt.org/jquery-3.0.0.js"></script>
+    <script>
+        function chpas() {//检验账号密码长度是否符合条件
+            if (arguments.length == 0) { 
+                return false;
+            };
+            for (var i =0;i< arguments.length;i++) {
+                if (arguments[i].length <8 || arguments[i].length >32) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        $('#subSetwifi').click(function() {
+            if (!chpas($('#ssid_24g').val(),$("#key_24g").val())) {
+                alert('请输入8到32位长度的密码')
+                return;
+            };
+            $.post(
+                '<%=controller%>/admin/home/wifiSet', 
+                {
+                    ssid_24g: $('#ssid_24g').val(),
+                    key_24g: $("#key_24g").val()
+                },
+                 function(data, textStatus, xhr) {
+                    if(data == 'success') {
+                        if (confirm("密码设置成功重启后生效,重启过程需要一分钟,请确认是否要重启:")) {
+                            $.get("<%=luci.dispatcher.build_url("admin/home/Reboot")%>");
+                            setTimeout(checkUp, 1*50*1000)
+                            $('#textTip').text('*正在重启请稍等...') 
+                        };
+                    }
+                }
+            );
+        });
+        function checkUp() { //检查是否重启完成若没有完成1秒钟之后再次检查,若完成跳转到登录页面
+            var timer=null;
+            clearTimeout(timer);
+            $.get('http://192.168.88.1/cgi-bin/luci', function(a,b,xhr) {  
+                if (xhr.status == 200 ) {
+                    window.location.href = "http://192.168.88.1/cgi-bin/luci"
+                }else {
+                    timer = setTimeout(checkUp, 1000)
+                }
+            });
+        }
+    </script>
 </body>
 </html>

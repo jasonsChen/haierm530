@@ -11,4 +11,4 @@ else
 end
 
 luciname    = "LuCI Trunk"
-luciversion = "1.29.1a"
+luciversion = "1.31.3a"

@@ -1,0 +1,105 @@
+@charset "UTF-8";
+
+p {
+	margin: 10px 0;
+}
+form {
+	padding-top: 10px;
+	padding-bottom: 20px;
+}
+.input_group {
+	font-size: 14px;
+	padding: 5px;
+}
+#wifiName,#netpassword {
+	width: 52%;
+	height: 30px;
+	line-height: 30px;
+	background: #E2E3E9;
+	outline: none;
+	border: 1px solid #55879d;
+}
+#setZhongji {
+	display: inline-block;
+	text-align: center;
+	width: 65px;
+	height: 30px;
+	line-height: 30px;
+	border: 1px solid #55879d;
+	border-radius: 5px;
+}
+#setZhongji:active {
+	text-decoration: none;
+	font-size: 14px;
+	font-weight: bold;
+}
+.submit_round_main {
+	display: block;
+	width: 50px;
+	height: 50px;
+	margin: 10px auto;
+	background: none;
+	border-top: 2px solid #acbdcd;
+    border-bottom: 2px solid #acbdcd;
+    border-radius: 25px;
+    text-align: center;
+    background: none;
+    color: #266883;	
+}
+.link-p {
+	text-align: right;
+}
+.wifi {
+	text-align: center;
+	font-size: 13px;
+	opacity: 0;
+	transition: all 2s;
+	-o-transition: all 2s;
+	-webkit-transition: all 2s;
+}
+.wifi>input {
+	margin:5px 8%;
+	padding: 2px 2%;
+	width: 80%;
+	height: 30px;
+	line-height: 30px;
+	border: 1px solid #55879d;
+	background: none;
+}
+.checkbox-p {
+	text-align: center;
+}
+/*.span-p {
+	margin: 5px 0 -5px 0;
+	padding-left: 10px;
+}
+.span {
+	width: 60px;
+	line-height: 30px;
+	
+}*/
+
+
+
+@media (min-width: 800px) {
+	form {
+		margin-right: 20px;
+		margin-left: 20px;
+		padding-top: 50px;
+	}
+}
+@media (max-width: 800px) {
+
+	.submit_round_main {
+		margin: 0 auto;
+	}
+	.link-p {
+		margin: 5px 0;
+	}
+	.checkbox-p {
+		margin: 5px 0;
+	}
+	.zhongji-status {
+		margin-bottom: -30px;
+	}
+}

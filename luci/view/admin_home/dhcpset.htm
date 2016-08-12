@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" media="screen and (max-width: 800px)" href="/luci-static/openwrt.org/cascade.css"/>
+    <link rel="stylesheet" media="screen and (min-width: 800px)" href="/luci-static/openwrt.org/cascadepc.css"/>
+    <title></title>
+    <style>
+        #active {
+            background: #266783;
+        }
+        #active a {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="container haier2_wrap">
+    <div class="haier2_header">
+        <img src="/luci-static/images/haier2_logo.png" alt="logo"/>
+    </div>
+    <div class="haier2_main">
+        <p><span>上网设置</span></p>
+        <div class="border_buttom"></div>
+        <ul class="haier4_list">
+            <li><a href="<%=luci.dispatcher.build_url("admin/home/pppoeset")%>">宽带拨号</a></li>
+            <li><a href="<%=luci.dispatcher.build_url("admin/home/staticset")%>">静态IP</a></li>
+            <li id="active"><a href="<%=luci.dispatcher.build_url("admin/home/dhcpset")%>">动态IP</a></li>
+            <li><a href="<%=luci.dispatcher.build_url("admin/home/repset")%>">无线中继</a></li>
+        </ul>
+        <div style="clear: both;"></div>
+        <form onsubmit='return false'>
+            <br/>
+            <p class="form_p">*动态IP的上网方式无需设置参数，点击下面的确认即可               
+            </p>
+            <br/> 
+            <p class="haier4_form_p form_p"><a href="<%=luci.dispatcher.build_url("admin/home/mainpage")%>"><span>详细配置</span></a></p><div style="clear: both;"></div>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <div class="submit_round">
+                <input class="submit_round_main" id='sub' type="submit" value="确认" />
+            </div>
+        </form>
+    </div>
+</div>
+<script src="/luci-static/openwrt.org/jquery-3.0.0.js"></script>
+    <script>    
+        $(function() {
+            $('#sub').click(function() {
+                $.post('<%=controller%>/admin/home/Dhcp_Set', 
+                    function(data, textStatus, xhr) {
+                    if (data == 'success') {
+                        if (confirm('设置成功,重启后才能生效,重启过程大概需要1分钟,确认是否现在重启')) {
+                            $.get("<%=luci.dispatcher.build_url("admin/home/Reboot")%>");
+                            setTimeout(checkUp, 1*50*1000);
+                        };
+                    };
+                });
+            });
+            function checkUp() { //检查是否重启完成若没有完成1秒钟之后再次检查,若完成跳转到登录页面
+              var timer=null;
+              clearTimeout(timer);
+              $.get('http://192.168.88.1/cgi-bin/luci', function(a,b,xhr) {  
+                  if (xhr.status == 200 ) {
+                      window.location.href = "http://192.168.88.1/cgi-bin/luci"
+                  }else {
+                      timer = setTimeout(checkUp, 2000)
+                  }
+              });
+            }    
+        })
+    </script>
+</body>
+</html>

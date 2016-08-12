@@ -23,7 +23,7 @@ You may obtain a copy of the License at
     <p style="color: #266883;">&#x7BA1;&#x7406;&#x5BC6;&#x7801;</p>
     <div class="haier1_input_group">
         <input type="text" style="display: none;" name="username" value="<%=duser%>"/>
-        <input class="haier1_pw" type="password" placeholder="&#x8BF7;&#x8F93;&#x5165;&#x5BC6;&#x7801;&#xFF08;&#x9ED8;&#x8BA4;admin&#xFF09;" name="password" /><lable class="haier1_pw_r" id="show_pw">&nbsp;</lable>
+        <input class="haier1_pw" autofocus="autofocus" required="required" type="password" placeholder="&#x8BF7;&#x8F93;&#x5165;&#x5BC6;&#x7801;&#xFF08;&#x9ED8;&#x8BA4;admin&#xFF09;" name="password" /><lable class="haier1_pw_r" id="show_pw">&nbsp;</lable>
     </div>
     <br/>
     <input type="submit" value="<%:Login%>" class="haier1_sbm" style="color: #266883;"/>
@@ -43,12 +43,13 @@ You may obtain a copy of the License at
 
         $("html").css("background","#004ea2");
         $("body").css("background","#004ea2");
-         
-      });  
-
         if (navigator.vendor == "Google Inc.") $("#show_pw").css('line-height','26px');
         if (navigator.vendor == "Apple Computer, Inc.") $("#show_pw").css('line-height','28px');
         $(".haier1_pw").width("262px").css('margin-right', '-4px');
+         
+      });  
+
+        
           
 </script>
 
