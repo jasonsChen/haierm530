@@ -1,17 +1,25 @@
-<%#
-LuCI - Lua Configuration Interface
-Copyright 2008 Steven Barth <steven@midlink.org>
-Copyright 2008-2012 Jo-Philipp Wich <xm@subsignal.org>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
--%>
-
-<%+header%>
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" type="text/css" media="screen" href="/luci-static/openwrt.org/cascade.css" />
+    <script src="/luci-static/openwrt.org/jquery-3.0.0.js"></script>
+    <title>Haier - LuCI</title>
+    <style>
+        html,body {
+            background: #004ea2;
+        }
+        .active {
+            background: #266783;
+        }
+        .active a {
+            color: #fff;
+        }
+    </style>
+</head>
+<body class="lang_zh-cn">
 
 
 <div class="haier1_header">
@@ -23,35 +31,39 @@ You may obtain a copy of the License at
     <p style="color: #266883;">&#x7BA1;&#x7406;&#x5BC6;&#x7801;</p>
     <div class="haier1_input_group">
         <input type="text" style="display: none;" name="username" value="<%=duser%>"/>
-        <input class="haier1_pw" autofocus="autofocus" required="required" type="password" placeholder="&#x8BF7;&#x8F93;&#x5165;&#x5BC6;&#x7801;&#xFF08;&#x9ED8;&#x8BA4;admin&#xFF09;" name="password" /><lable class="haier1_pw_r" id="show_pw">&nbsp;</lable>
+        <input class="haier1_pw" required="required" type="password" placeholder="&#x8BF7;&#x8F93;&#x5165;&#x5BC6;&#x7801;&#xFF08;&#x9ED8;&#x8BA4;admin&#xFF09;" name="password" id="password" /><lable class="haier1_pw_r" id="show_pw" >&nbsp;</lable>
     </div>
     <br/>
     <input type="submit" value="<%:Login%>" class="haier1_sbm" style="color: #266883;"/>
     </form>
 </div>
+
+
+<div class="clear"></div>
+
+
 <script>
-      $(function(){
+        $(function(){
         $("#show_pw").click(function(){
-            var pwType = $(".haier1_pw").attr("type")
+            var pwType = $(".haier1_pw").attr("type");
             if(pwType == "password"){
               $(".haier1_pw").attr("type","text")
             }else {
               $(".haier1_pw").attr("type","password")
             }
-        }
-        );
+        });
+        // $("html").css("background","#004ea2");
+        // $("body").css("background","#004ea2");
 
-        $("html").css("background","#004ea2");
-        $("body").css("background","#004ea2");
-        if (navigator.vendor == "Google Inc.") $("#show_pw").css('line-height','26px');
+        if (navigator.vendor == "Google Inc.") {
+            $("#show_pw").css('line-height','26px');
+            if (!navigator.maxTouchPoints) {
+                $("#show_pw").css('line-height','27px');
+            };
+        };
         if (navigator.vendor == "Apple Computer, Inc.") $("#show_pw").css('line-height','28px');
         $(".haier1_pw").width("262px").css('margin-right', '-4px');
-         
       });  
-
-        
-          
 </script>
-
-
-<%+footer%>
+</body>
+</html>

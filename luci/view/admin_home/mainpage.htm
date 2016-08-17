@@ -6,6 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" media="screen and (max-width: 800px)" href="/luci-static/openwrt.org/cascade.css"/>
     <link rel="stylesheet" media="screen and (min-width: 800px)" href="/luci-static/openwrt.org/cascadepc.css"/>
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="/luci-static/openwrt.org/ie8.css">
+    <script src="js/html5shiv.min.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+    <script>
+        var lin = document.createElement("link");
+        lin.src= "/luci-static/openwrt.org/ie8.css"
+        head.appendChild(lin)
+    </script>
     <script src="/luci-static/openwrt.org/jquery-3.0.0.js"></script>
     <title></title>
     <style>
@@ -151,25 +161,29 @@
                 });
             }
             $("#listUL .haier2_menu_list2:eq(2)").click(function() {
+              if ($(this).data('index') == 2) {
                 if(confirm("重启设备将需要60s左右的时间,请确认是否要重启:")) {
                   $.get("<%=luci.dispatcher.build_url("admin/home/Reboot")%>")
                   setTimeout(checkUp, 1*50*1000)
                 }
                 return false;
+              };
             });
             $("#listUL .haier2_menu_list2:eq(3)").click(function() {
-                if(confirm("恢复出厂将需要2分钟左右的时间,请确认是否要重启:")) {
+              if ($(this).data('index') == 2) {
+                if(confirm("恢复出厂将需要2分钟左右的时间,请确认是否要恢复出厂:")) {
                   $.get("<%=luci.dispatcher.build_url("admin/home/ResetFactory")%>")
                   setTimeout(checkUp, 2*50*1000)
                 }
                 return false;
+              };
             });
             function checkUp() { //检查是否重启完成若没有完成1秒钟之后再次检查,若完成跳转到登录页面
               var timer=null;
               clearTimeout(timer);
-              $.get('http://192.168.88.1/cgi-bin/luci', function(a,b,xhr) {  
+              $.get('<%=luci.dispatcher.build_url("admin/home/mainpage")%>', function(a,b,xhr) {  
                   if (xhr.status == 200 ) {
-                      window.location.href = "http://192.168.88.1/cgi-bin/luci"
+                      window.location.href = "<%=luci.dispatcher.build_url("admin/home/mainpage")%>"
                   }else {
                       timer = setTimeout(checkUp, 2000)
                   }

@@ -44,8 +44,8 @@
             <br/>
             <p class="form_p">*&#x8BF7;&#x8F93;&#x5165;&#x8FD0;&#x8425;&#x5546;&#x7ED9;&#x60A8;&#x7684;&#x5BBD;&#x5E26;&#x4E0A;&#x7F51;&#x8D26;&#x53F7;&#x53CA;&#x5BC6;&#x7801;,&#x5982;&#x6709;&#x9057;&#x5FD8;,&#x53EF;&#x62E8;&#x6253;&#x8FD0;&#x8425;&#x5546;&#x7535;&#x8BDD;&#x627E;&#x56DE;</p>
             <div class="haier3_input_group">
-                <label class="input" style="display: inline-block;border:none;padding-left:0;"><span style='width:70px;font-size:14px;display:inline-block;'>宽带账号</span><input required maxlength='32' style="display: inline-block;min-width:52%;height:30px;border:1px solid #55879d;background:none;padding-left:10px;" type="text" placeholder="请输入宽带账号"name="account" class="form-control" id="account" value="<%=username%>"/></label>
-                <label class="input" style="display: inline-block;border:none;padding-left:0;"><span style='width:70px;font-size:14px;display:inline-block;'>宽带密码</span><input required minlength='8' maxlength='32' style="display: inline-block;min-width:52%;height:30px;border:1px solid #55879d;background:none;padding-left:10px;" type="text" placeholder="请输入宽带密码"name="password" class="form-control" id="password" value="<%=password%>"/></label>
+                <label class="input" style="display: inline-block;border:none;padding-left:0;"><span style='width:70px;font-size:14px;display:inline-block;'>宽带账号</span><input style="display: inline-block;min-width:52%;height:30px;border:1px solid #55879d;background:none;padding-left:10px;" type="text" placeholder="请输入宽带账号"name="account" class="form-control" id="account" value="<%=username%>"/></label>
+                <label class="input" style="display: inline-block;border:none;padding-left:0;"><span style='width:70px;font-size:14px;display:inline-block;'>宽带密码</span><input style="display: inline-block;min-width:52%;height:30px;border:1px solid #55879d;background:none;padding-left:10px;" type="text" placeholder="请输入宽带密码"name="password" class="form-control" id="password" value="<%=password%>"/></label>
             </div>
             <br/>
             
@@ -59,21 +59,20 @@
     <script src="/luci-static/openwrt.org/jquery-3.0.0.js"></script>
     <script>
         function chpas() {//检验账号密码长度是否符合条件
-            if (arguments.length == 0) { 
-                return false;
-            };
-            for (var i =0;i< arguments.length;i++) {
-                if (arguments[i].length <= 0 || arguments[i].length >32) {
-                    return false;
-                }
+            if (arguments[0].length==0) {
+                return [false,"请输入正确的宽带账号","#account"]
+            }else if (arguments[1].length==0) {
+                return [false,"请输入正确的宽带密码","#password"]
+            }else {
+                return [true]
             }
-            if(arguments[1].length<8) {return false;}
-            return true;
         }
         $(function() {
             $('#subPppo').click(function() {
-                if (!chpas($("#account").val(),$("#password").val())) {
-                    alert('请输入8到32位长度的密码');
+                var resut = chpas($("#account").val(),$("#password").val());
+                if (!resut[0]) {
+                    alert(resut[1]);
+                    $(resut[2]).focus();
                     return;
                 };
                 $.post('<%=controller%>/admin/home/Pppoe_Set', 
@@ -92,9 +91,9 @@
             function checkUp() { //检查是否重启完成若没有完成1秒钟之后再次检查,若完成跳转到登录页面
               var timer=null;
               clearTimeout(timer);
-              $.get('http://192.168.88.1/cgi-bin/luci', function(a,b,xhr) {  
+              $.get('<%=luci.dispatcher.build_url("admin/home/pppoeset")%>', function(a,b,xhr) {  
                   if (xhr.status == 200 ) {
-                      window.location.href = "http://192.168.88.1/cgi-bin/luci"
+                      window.location.href = "<%=luci.dispatcher.build_url("admin/home/pppoeset")%>"
                   }else {
                       timer = setTimeout(checkUp, 2000)
                   }

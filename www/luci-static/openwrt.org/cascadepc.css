@@ -289,7 +289,23 @@ body {
 }
 #wifiName {
     display: inline-block;
-    min-width:52%;height:30px;
+    min-width:52%;
+    height:30px;
     border:1px solid #55879d;
     background: none;
+}
+#netpassword {
+    display: inline-block;
+    min-width:52%;
+    height:30px;
+    border:1px solid #55879d;
+    background:none;
+}
+@media (max-width: 350px) {
+    #wifiName {
+        min-width:45%;
+    }
+    #netpassword {
+        min-width:45%;
+    }
 }

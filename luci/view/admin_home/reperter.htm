@@ -38,6 +38,7 @@
 
     local ssid = uci:get_first("wireless","wifi-iface","ssid") or "HappyHome"                                                                              
     local key = uci:get_first("wireless","wifi-iface","key") 
+    local lanipaddr = uci:get("network","lan","ipaddr")
 
     mode= uci:get("network","wan","mode") or "dhcp"
 
@@ -46,6 +47,7 @@
 %>
 
 <body>
+
 <div class="container haier2_wrap">
     <div class="haier2_header">
         <img src="/luci-static/images/haier2_logo.png" alt="logo"/>
@@ -69,7 +71,7 @@
                         <span id="setZhongji">重新扫描</span>
                         </div>
                         <label class="input" style="display: inline-block;border:none;padding-left:0;">网络密码
-                        <input type="password" required maxlength='32' name="netpassword"id="netpassword" style="display: inline-block;min-width:52%;height:30px;border:1px solid #55879d;background:none;"></label>
+                        <input type="password" name="netpassword"id="netpassword"></label>
                         <p></p>
                         <label><input type="checkbox" id="showPs">显示密码</label>
                     </div>
@@ -83,8 +85,8 @@
             <div class="haier3_input_group" id='pas'>
                 <br>
                 <p class='form_p' style='text-align:center;'>手工输入WIFI名称和密码</p>
-                <input type="text" required maxlength='32' placeholder="请输入无线名称" name="ssid_24g"  id="ssid_24g"/>
-                <input type="password" required minlength="8" maxlength='32' placeholder="请输入无线密码" name="key_24g" id="key_24g"/>
+                <input type="text" placeholder="请输入无线名称" name="ssid_24g"  id="ssid_24g"/>
+                <input type="password" placeholder="请输入无线密码" name="key_24g" id="key_24g"/>
             </div>       
             <p class="haier4_form_p form_p"><a href="<%=luci.dispatcher.build_url("admin/home/mainpage")%>"><span>详细配置</span></a></p><div style="clear: both;"></div>
             <div class="submit_round">
@@ -95,20 +97,28 @@
 </div>
 <script>
     function chpas() {//检验账号密码长度是否符合条件
-        if (arguments.length == 0) { 
-            return false;
-        };
-        for (var i =0;i< arguments.length;i++) {
-            if (arguments[i].length ==0 || arguments[i].length >32) {
-                return false;
+        if (!arguments[0]) {
+            return [false,"请选择可用的WIFI"]
+        }else if ($("#setPas")[0].checked) {
+            if(arguments[1].length<=0) {
+                return [false,"请输入正确的网络密码","#netpassword"]
+            }else{
+                return [true]
+            }    
+        }else {
+            if(arguments[1].length<=0) {
+                return [false,"请输入正确的网络密码","#netpassword"]
+            }else if (arguments[2].length<=0 || arguments[2].length>32) {
+                return [false,"请输入32位以下长度的无线名称","#ssid_24g"]
+            }else if (arguments[3].length<8 || arguments[3].length>32) {
+                return [false,"请输入8到32位长度的无线密码","#key_24g"]
+            }else {
+                return [true]
             }
         }
-        if (!$("#setPas")[0].checked &&arguments[3].length< 8) return false;
-        return true;
     }
-
-
     var currWifi;//用于保存扫描到的所有wifi
+    var wepWifi;//用于保存加密方式为wep的wifi
     $(wifi_scan);
     $("#setZhongji").click(function(){wifi_scan()});
     function wifi_scan() { //扫描wifi
@@ -141,7 +151,7 @@
         connect(currWifi);
 
     });
-    function connect(e) {
+    function connect(e) {  //点击确定触发中继功能
         var bssidStr = "",encryptionStr = "",channelStr = "",groupCiphersStr = "";
         if ($("#wifi_scan").text() == "扫描失败"|| typeof(e) == "undefined") { //确认当前已经扫描到了wifi
             $("#wifi_scan").text("没有扫描到WIFI,请点击重新扫描后重试").css("color","red")
@@ -176,11 +186,20 @@
                 };
             };
         }
-        if (!chpas($("#wifiName").val(),$("#netpassword").val(),$("#ssid_24g").val(),$("#key_24g").val())) {
-            alert('请输入8到32位长度的密码');
+        //发送前的验证
+        var resut = chpas($("#wifiName").val(),$("#netpassword").val(),$("#ssid_24g").val(),$("#key_24g").val());
+        if (!resut[0]) {
+            alert(resut[1]);
+            if (resut[2]) {
+                $(resut[2]).focus();
+            };
             return;
         };
-        $.post('<%=luci.dispatcher.build_url("admin/home/Qui_REP_Set")%>',
+        if (encryptionStr == "WEP") {//不支持WEP加密方式的WIFI
+            alert("路由器不支持WEP加密方式的WIFI，请使用其他WIFI。")
+            return;
+        };
+        $.post('<%=luci.dispatcher.build_url("admin/home/Qui_REP_Set")%>',  //数据无误发送POST请求
             {
                 wifiName: $("#wifiName").val(),
                 netpassword: $("#netpassword").val(),
@@ -191,7 +210,7 @@
                 ssid_24g: $("#ssid_24g").val(),
                 key_24g: $("#key_24g").val(),
             },
-            function(data, textStatus, xhr) {
+            function(data, textStatus, xhr) {  //请求发送完毕重启生效
                 if (data == 'success') {
                     if (confirm('设置成功,重启后才能生效,重启过程大概需要1分钟,确认是否现在重启')) {
                         $.get("<%=luci.dispatcher.build_url("admin/home/Reboot")%>");
@@ -239,9 +258,9 @@
     function checkUp() { //检查是否重启完成若没有完成1秒钟之后再次检查,若完成跳转到登录页面
               var timer=null;
               clearTimeout(timer);
-              $.get('http://192.168.88.1/cgi-bin/luci', function(a,b,xhr) {  
+              $.get("<%=luci.dispatcher.build_url("admin/home/reperter")%>", function(a,b,xhr) {  
                   if (xhr.status == 200 ) {
-                      window.location.href = "http://192.168.88.1/cgi-bin/luci"
+                      window.location.href = "<%=luci.dispatcher.build_url("admin/home/reperter")%>"
                   }else {
                       timer = setTimeout(checkUp, 2000)
                   }

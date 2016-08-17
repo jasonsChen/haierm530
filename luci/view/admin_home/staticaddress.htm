@@ -34,15 +34,20 @@
         <form onsubmit="return false">
             <p class="form_p">*请输入运营商给您的IP、子网掩码等信息</p>
             <div class="haier3_input_group">
-                <input type="text" required placeholder="请输入您的IP地址" name="ipaddr" class="form-control" id="ipaddr" />
-                <input type="text" required placeholder="请输入您的子网掩码" name="netmask" class="form-control" id="netmask" />
-                <input type="text" required placeholder="请输入您的默认网关" name="gateway" class="form-control" id="gateway"/>
-                <input type="text" required placeholder="请输入您的DNS（首选）" name="dns" class="form-control" id="dns"/>
+                <input type="text" placeholder="请输入您的IP地址" name="ipaddr" class="form-control" id="ipaddr" />
+                <input type="text" placeholder="请输入您的子网掩码" name="netmask" class="form-control" id="netmask" list="netmasks" />
+                <datalist id="netmasks">
+                  <option value="255.255.255.0">
+                  <option value="255.255.0.0">
+                  <option value="255.0.0.0">
+                </datalist>
+                <input type="text" placeholder="请输入您的默认网关" name="gateway" class="form-control" id="gateway"/>
+                <input type="text" placeholder="请输入您的DNS（首选）" name="dns" class="form-control" id="dns"/>
             </div>
             <p class="form_p">*请设置您的无线网络信息。注意：为防止无线网络被他人盗用，请设置复杂的无线密码</p>
             <div class="haier3_input_group">
-                <input type="text" required maxlength='32' placeholder="请输入无线名称" name="ssid_24g" value="<%=ssid%>" id="ssid_24g"/>
-                <input type="text" required minlength='8' maxlength='32' placeholder="请输入无线密码" name="key_24g" id="key_24g" value="<%=key%>"/>
+                <input type="text" placeholder="请输入无线名称" name="ssid_24g" value="<%=ssid%>" id="ssid_24g"/>
+                <input type="text" maxlength='32' placeholder="请输入无线密码" name="key_24g" id="key_24g" value="<%=key%>"/>
             </div>
             <p class="haier4_form_p form_p"><a href="<%=luci.dispatcher.build_url("admin/home/mainpage")%>"><span>详细配置</span></a></p><div style="clear: both;"></div>
             <div class="submit_round">
@@ -53,34 +58,37 @@
 </div>
 <script src="/luci-static/openwrt.org/jquery-3.0.0.js"></script>
     <script>
-        function chpas() {//检验账号密码长度是否符合条件
-            if (arguments.length == 0) { 
-                return false;
-            };
-            for (var i =0;i< arguments.length;i++) {
-                if (i<4) {
-                    if (arguments[i].length=0) {return false};
-                }else {
-                    if (arguments[i].length <=0 || arguments[i].length >32) {
-                        return false;
-                    }
-                }
-                
+        function chpas() {//检验账号密码长度是否符合条件 并返回错误信息和id
+            var re =  /^([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/;
+            if (!re.test(arguments[0])) {
+                return [false,"请输入正确的IP地址",'#ipaddr']
+            }else if (!re.test(arguments[1])) {
+                return [false,"请输入正确的子网掩码",'#netmask']
+            }else if (!re.test(arguments[2])) {
+                return [false,"请输入正确的网关",'#gateway']
+            }else if (!re.test(arguments[3])) {
+                return [false,"请输入正确的DNS",'#dns']
+            }else if (arguments[4].length<=0||arguments[4].length>32) {
+                return [false,"请输入32位以下长度的无线名称",'#ssid_24g']
+            }else if (arguments[5].length<8||arguments[5].length>32) {
+                return [false,"请输入8到32位长度的无线密码",'#key_24g']
+            }else {
+                return [true]
             }
-            if (arguments[5].length<8) {return false};
-            return true;
         }
         $(function() {
             $('#sub').click(function() {
-                if (!chpas(
-                            $("#ipaddr").val(),
-                            $("#netmask").val(),
-                            $("#gateway").val(),
-                            $("#dns").val(),
-                            $("#ssid_24g").val(),
-                            $("#key_24g").val()
-                            )) {
-                    alert('请检查你的输入是否有误');
+                var resut = chpas(
+                                $("#ipaddr").val(),
+                                $("#netmask").val(),
+                                $("#gateway").val(),
+                                $("#dns").val(),
+                                $("#ssid_24g").val(),
+                                $("#key_24g").val()
+                            )
+                if (!resut[0]) {
+                    alert(resut[1]);
+                    $(resut[2]).focus();
                     return;
                 }; 
                 $.post('<%=controller%>/admin/home/Qui_STATIC_Set', 
@@ -103,9 +111,9 @@
             function checkUp() { //检查是否重启完成若没有完成1秒钟之后再次检查,若完成跳转到登录页面
               var timer=null;
               clearTimeout(timer);
-              $.get('http://192.168.88.1/cgi-bin/luci', function(a,b,xhr) {  
+              $.get('<%=luci.dispatcher.build_url("admin/home/staticaddress")%>', function(a,b,xhr) {  
                   if (xhr.status == 200 ) {
-                      window.location.href = "http://192.168.88.1/cgi-bin/luci"
+                      window.location.href = "<%=luci.dispatcher.build_url("admin/home/staticaddress")%>"
                   }else {
                       timer = setTimeout(checkUp, 2000)
                   }

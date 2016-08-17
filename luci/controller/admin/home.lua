@@ -129,9 +129,12 @@ function action_QuiPPP_Set()
 
 	luci.sys.call("rm -f /etc/config/ap_client_web")
 
-	local url = luci.dispatcher.build_url("admin/home/quicksetup") .. "" .. "?action=wanset"
-	url = url .. "" ..  "?result=success";
-	luci.http.redirect(url)
+	--local url = luci.dispatcher.build_url("admin/home/quicksetup") .. "" .. "?action=wanset"
+	--url = url .. "" ..  "?result=success";
+	--luci.http.redirect(url)
+
+	luci.http.prepare_content("application/json")
+	luci.http.write_json("success")
 end
 
 function action_QuiRep_Set()
@@ -224,14 +227,15 @@ function action_QuiRep_Set()
 	--luci .sys.exec("/etc/init.d/network restart")
 	--luci.sys.exec("sleep 4;iwpriv apcli0 show connStatus")
 	
-	local apcli = luci.util.pcdata(fs.readfile("/proc/apcli_info")) or "Disconnect"
-	luci.sys.exec("echo apcli= %q >> /tmp/tmp.log" % apcli)
-	local result = "error"
-	if  string.find(apcli,"Disconnect") then
-		result="error"
-	else
-		result="success"
-	end
+	--local apcli = luci.util.pcdata(fs.readfile("/proc/apcli_info")) or "Disconnect"
+	--luci.sys.exec("echo apcli= %q >> /tmp/tmp.log" % apcli)
+	--local result = "error"
+	--if  string.find(apcli,"Disconnect") then
+	--	result="error"
+	--else
+	--	result="success"
+	--end
+	result="success"
 	
 	--local url = luci.dispatcher.build_url("admin/home/reperter") .. "" .. "?action=wanset"
 	--url = url .. "" ..  "?result=" .. result;
@@ -290,9 +294,12 @@ function action_QuiDHCP_Set()
 
 	luci.sys.call("rm -f /etc/config/ap_client_web")
 
-	local url = luci.dispatcher.build_url("admin/home/dynamicaddress") .. "" .. "?action=wanset"
-	url = url .. "" ..  "?result=success";
-	luci.http.redirect(url)
+	--local url = luci.dispatcher.build_url("admin/home/dynamicaddress") .. "" .. "?action=wanset"
+	--url = url .. "" ..  "?result=success";
+	--luci.http.redirect(url)
+
+	luci.http.prepare_content("application/json")
+	luci.http.write_json("success")
 end
 
 function action_QuiSTATIC_Set()
@@ -350,9 +357,11 @@ function action_QuiSTATIC_Set()
 
 	luci.sys.call("rm -f /etc/config/ap_client_web")
 
-	local url = luci.dispatcher.build_url("admin/home/staticaddress") .. "" .. "?action=wanset"
-	url = url .. "" ..  "?result=success";
-	luci.http.redirect(url)
+	--local url = luci.dispatcher.build_url("admin/home/staticaddress") .. "" .. "?action=wanset"
+	--url = url .. "" ..  "?result=success";
+	--luci.http.redirect(url)
+	luci.http.prepare_content("application/json")
+	luci.http.write_json("success")
 end
 
 function action_wifiScan()
@@ -538,14 +547,15 @@ function action_Rep_Set()
 	--luci .sys.exec("/etc/init.d/network restart")
 	--luci.sys.exec("sleep 4;iwpriv apcli0 show connStatus")
 	
-	local apcli = luci.util.pcdata(fs.readfile("/proc/apcli_info")) or "Disconnect"
-	luci.sys.exec("echo apcli= %q >> /tmp/tmp.log" % apcli)
-	local result = "error"
-	if  string.find(apcli,"Disconnect") then
-		result="error"
-	else
-		result="success"
-	end
+	--local apcli = luci.util.pcdata(fs.readfile("/proc/apcli_info")) or "Disconnect"
+	--luci.sys.exec("echo apcli= %q >> /tmp/tmp.log" % apcli)
+	--local result = "error"
+	--if  string.find(apcli,"Disconnect") then
+	--	result="error"
+	--else
+	--	result="success"
+	--end
+	result="success"
 	
 	--local url = luci.dispatcher.build_url("admin/home/reperter") .. "" .. "?action=repSet"
 	--url = url .. "" ..  "?result=" .. result;
@@ -597,9 +607,11 @@ function action_Pppoe_Set()
 
 	luci.sys.call("rm -f /etc/config/ap_client_web")
 
-	local url = luci.dispatcher.build_url("admin/home/pppoeset") .. "" .. "?action=pppoeset"
-	url = url .. "" ..  "?result=success";
-	luci.http.redirect(url)
+	--local url = luci.dispatcher.build_url("admin/home/pppoeset") .. "" .. "?action=pppoeset"
+	--url = url .. "" ..  "?result=success";
+	--luci.http.redirect(url)
+	luci.http.prepare_content("application/json")
+	luci.http.write_json("success")
 end
 
 function action_Dhcp_Set()
@@ -641,9 +653,11 @@ function action_Dhcp_Set()
 
 	luci.sys.call("rm -f /etc/config/ap_client_web")
 
-	local url = luci.dispatcher.build_url("admin/home/dhcpset") .. "" .. "?action=dhcpset"
-	url = url .. "" ..  "?result=success";
-	luci.http.redirect(url)
+	--local url = luci.dispatcher.build_url("admin/home/dhcpset") .. "" .. "?action=dhcpset"
+	--url = url .. "" ..  "?result=success";
+	--luci.http.redirect(url)
+	luci.http.prepare_content("application/json")
+	luci.http.write_json("success")
 end
 
 function action_Static_Set()
@@ -692,9 +706,11 @@ function action_Static_Set()
 
 	luci.sys.call("rm -f /etc/config/ap_client_web")
 
-	local url = luci.dispatcher.build_url("admin/home/staticset") .. "" .. "?action=staticset"
-	url = url .. "" ..  "?result=success";
-	luci.http.redirect(url)
+	--local url = luci.dispatcher.build_url("admin/home/staticset") .. "" .. "?action=staticset"
+	--url = url .. "" ..  "?result=success";
+	--luci.http.redirect(url)
+	luci.http.prepare_content("application/json")
+	luci.http.write_json("success")
 end
 
 function action_repStatus()
@@ -736,7 +752,7 @@ function action_wifiSet()
 		return luci.http.formvalue(x)
 	end
 
-	local ssid = param("ssid_24g") or "HappyHome"
+	local ssid = param("ssid_24g") or "HaierHome"
 	local key = param("key_24g") or "00000000"
 
 	luci.sys.call("uci set wireless.@wifi-iface[0].ssid=%q"%ssid)
@@ -745,9 +761,11 @@ function action_wifiSet()
 	luci.sys.call("uci set wireless.@wifi-iface[0].disabled=0")
 	uci:commit("wireless")
 
-	local url = luci.dispatcher.build_url("admin/home/mainpage") .. "" .. "?action=wifiset"
-	url = url .. "" ..  "?result=success";
-	luci.http.redirect(url)
+	--local url = luci.dispatcher.build_url("admin/home/mainpage") .. "" .. "?action=wifiset"
+	--url = url .. "" ..  "?result=success";
+	--luci.http.redirect(url)
+	luci.http.prepare_content("application/json")
+	luci.http.write_json("success")
 end
 
 
@@ -767,10 +785,15 @@ function action_passwordChange()
 	
     if luci.sys.user.setpasswd("admin",pwd1) ~= 0 then 
     	luci.sys.call("echo password=%q > /tmp/pwd.log"%pwd1)
+    	luci.http.prepare_content("application/json")
+		luci.http.write_json("error")
+    else
+    	luci.http.prepare_content("application/json")
+		luci.http.write_json("success")
     end
 
-    local url = luci.dispatcher.build_url("admin/home/mainpage") .. "" .. "?action=pwdset"
-	luci.http.redirect(url)
+    --local url = luci.dispatcher.build_url("admin/home/mainpage") .. "" .. "?action=pwdset"
+	--luci.http.redirect(url)
 end
 
 
@@ -810,9 +833,12 @@ function action_LanIPSet()
 
     local ip =uci:get("network","lan","ipaddr")
 	luci.sys.exec("echo lanip =%q > /tmp/lanip.log"%ip)
-	local url = luci.dispatcher.build_url("admin/home/mainpage") .. "" .. "?action=lanipset"
-	luci.http.redirect(url)
+
+	--local url = luci.dispatcher.build_url("admin/home/mainpage") .. "" .. "?action=lanipset"
+	--luci.http.redirect(url)
 	--luci.sys.exec("reboot")
+	luci.http.prepare_content("application/json")
+	luci.http.write_json("success")
 end
 
 function action_lease_status()

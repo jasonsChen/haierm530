@@ -65,9 +65,9 @@
             function checkUp() { //检查是否重启完成若没有完成1秒钟之后再次检查,若完成跳转到登录页面
               var timer=null;
               clearTimeout(timer);
-              $.get('http://192.168.88.1/cgi-bin/luci', function(a,b,xhr) {  
+              $.get('<%=luci.dispatcher.build_url("admin/home/dhcpset")%>', function(a,b,xhr) {  
                   if (xhr.status == 200 ) {
-                      window.location.href = "http://192.168.88.1/cgi-bin/luci"
+                      window.location.href = "<%=luci.dispatcher.build_url("admin/home/dhcpset")%>"
                   }else {
                       timer = setTimeout(checkUp, 2000)
                   }

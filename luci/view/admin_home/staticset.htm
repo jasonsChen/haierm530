@@ -44,10 +44,15 @@
             <br/>
             <p class="form_p">*请输入运营商给您的IP、子网掩码等信息。如有遗忘,可拨打运营商电话找回</p>
             <div class="haier3_input_group">
-                <label class="input" style="display: inline-block;border:none;padding-left:0;"><span style='width:70px;font-size:14px;display:inline-block;'>IP地址</span><input  style="display: inline-block;min-width:52%;height:30px;border:1px solid #55879d;background:none;padding-left:10px;" type="text" required placeholder="请输入您的IP地址" name="ipaddr" id="ipaddr" value="<%=ipaddr%>"/></label>
-                <label class="input" style="display: inline-block;border:none;padding-left:0;"><span style='width:70px;font-size:14px;display:inline-block;'>子网掩码</span><input  style="display: inline-block;min-width:52%;height:30px;border:1px solid #55879d;background:none;padding-left:10px;" type="text" required placeholder="请输入您的子网掩码" name="netmask" id="netmask" value="<%=netmask%>"/></label>
-                <label class="input" style="display: inline-block;border:none;padding-left:0;"><span style='width:70px;font-size:14px;display:inline-block;'>默认网关</span><input  style="display: inline-block;min-width:52%;height:30px;border:1px solid #55879d;background:none;padding-left:10px;" type="text" required placeholder="请输入您的默认网关" name="gateway" id="gateway" value="<%=gateway%>"/></label>
-                <label class="input" style="display: inline-block;border:none;padding-left:0;"><span style='width:70px;font-size:14px;display:inline-block;'>首选DNS</span><input  style="display: inline-block;min-width:52%;height:30px;border:1px solid #55879d;background:none;padding-left:10px;" type="text" required placeholder="请输入您的DNS（首选)" name="dns" id="dns" value="<%=dns%>"/></label>
+                <label class="input" style="display: inline-block;border:none;padding-left:0;"><span style='width:70px;font-size:14px;display:inline-block;'>IP地址</span><input  style="display: inline-block;min-width:52%;height:30px;border:1px solid #55879d;background:none;padding-left:10px;" type="text" placeholder="请输入您的IP地址" name="ipaddr" id="ipaddr" value="<%=ipaddr%>"/></label>
+                <label class="input" style="display: inline-block;border:none;padding-left:0;"><span style='width:70px;font-size:14px;display:inline-block;'>子网掩码</span><input  style="display: inline-block;min-width:52%;height:30px;border:1px solid #55879d;background:none;padding-left:10px;" type="text" placeholder="请输入您的子网掩码" name="netmask" id="netmask" list="netmasks" value="<%=netmask%>"/></label>
+                <datalist id="netmasks">
+                  <option value="255.255.255.0">
+                  <option value="255.255.0.0">
+                  <option value="255.0.0.0">
+                </datalist>
+                <label class="input" style="display: inline-block;border:none;padding-left:0;"><span style='width:70px;font-size:14px;display:inline-block;'>默认网关</span><input  style="display: inline-block;min-width:52%;height:30px;border:1px solid #55879d;background:none;padding-left:10px;" type="text" placeholder="请输入您的默认网关" name="gateway" id="gateway" value="<%=gateway%>"/></label>
+                <label class="input" style="display: inline-block;border:none;padding-left:0;"><span style='width:70px;font-size:14px;display:inline-block;'>首选DNS</span><input  style="display: inline-block;min-width:52%;height:30px;border:1px solid #55879d;background:none;padding-left:10px;" type="text" placeholder="请输入您的DNS（首选)" name="dns" id="dns" value="<%=dns%>"/></label>
             </div>
             <br/>
             <p class="haier4_form_p form_p"><a href="<%=luci.dispatcher.build_url("admin/home/mainpage")%>"><span>详细配置</span></a></p><div style="clear: both;"></div>
@@ -60,24 +65,30 @@
 <script src="/luci-static/openwrt.org/jquery-3.0.0.js"></script>
     <script>
         function chpas() {//检验账号密码长度是否符合条件
-            if (arguments.length == 0) { 
-                return false;
-            };
-            for (var i =0;i< arguments.length;i++) {
-                if (arguments[i].length==0) {
-                    return false;
-                }
+             var re =  /^([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/;
+            if (!re.test(arguments[0])) {
+                return [false,"请输入正确的IP地址",'#ipaddr']
+            }else if (!re.test(arguments[1])) {
+                return [false,"请输入正确的子网掩码",'#netmask']
+            }else if (!re.test(arguments[2])) {
+                return [false,"请输入正确的网关",'#gateway']
+            }else if (!re.test(arguments[3])) {
+                return [false,"请输入正确的DNS",'#dns']
+            }else {
+                return [true]
             }
-            return true;
         }
         $(function() {
             $('#sub').click(function() {
-                if (!chpas($("#ipaddr").val(),
-                            $("#netmask").val(),
-                            $("#gateway").val(),
-                            $("#dns").val()
-                            )) {
-                    alert('密码不能为空');
+                var resut = chpas(
+                                $("#ipaddr").val(),
+                                $("#netmask").val(),
+                                $("#gateway").val(),
+                                $("#dns").val()
+                            )
+                if (!resut[0]) {
+                    alert(resut[1]);
+                    $(resut[2]).focus();
                     return;
                 }; 
                 $.post('<%=controller%>/admin/home/Static_Set', 
@@ -98,9 +109,9 @@
             function checkUp() { //检查是否重启完成若没有完成1秒钟之后再次检查,若完成跳转到登录页面
               var timer=null;
               clearTimeout(timer);
-              $.get('http://192.168.88.1/cgi-bin/luci', function(a,b,xhr) {  
+              $.get('<%=luci.dispatcher.build_url("admin/home/staticset")%>', function(a,b,xhr) {  
                   if (xhr.status == 200 ) {
-                      window.location.href = "http://192.168.88.1/cgi-bin/luci"
+                      window.location.href = "<%=luci.dispatcher.build_url("admin/home/staticset")%>"
                   }else {
                       timer = setTimeout(checkUp, 2000)
                   }

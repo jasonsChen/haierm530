@@ -60,7 +60,7 @@ body {
     border-bottom: 1px solid #b4c5d0;
 }
 .haier1_pw {
-    width: 258px;/*œÏ”¶*/
+    width: 258px;
     height: 30px;
     text-indent: 42px;
     background: #dfe0e7;
@@ -92,6 +92,8 @@ body {
     border-right: 1px solid #b4c5d0;
     border-top: 1px solid #b4c5d0;
     border-bottom: 1px solid #b4c5d0;
+    line-height: 31px;
+    outline: none;
 }
 .haier1_form {
     width: 300px;
@@ -334,6 +336,22 @@ body {
 }
 #wifiName {
     display: inline-block;
-    min-width:52%;height:30px;
+    width:52%;
+    height:30px;
     border:1px solid #55879d;
+}
+#netpassword {
+    display: inline-block;
+    width:52%;
+    height:30px;
+    border:1px solid #55879d;
+    background:none;
+}
+@media (max-width: 350px) {
+    #wifiName {
+        width:45%;
+    }
+    #netpassword {
+        width:45%;
+    }
 }

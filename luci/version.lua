@@ -7,8 +7,8 @@ if pcall(dofile, "/etc/openwrt_release") and _G.DISTRIB_DESCRIPTION then
 	distversion = _G.DISTRIB_DESCRIPTION
 else
 	distname    = "OpenWrt Firmware"
-	distversion = "Barrier Breaker (unknown)"
+	distversion = "Barrier Breaker (r445)"
 end
 
 luciname    = "LuCI Trunk"
-luciversion = "1.31.3a"
+luciversion = "1.1633.2a"

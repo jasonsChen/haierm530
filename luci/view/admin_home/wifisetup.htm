@@ -24,11 +24,11 @@
             <p>*请设置您的无线网络信息。注意：为防止无线网络被他人盗用，请设置复杂的无线密码。</p>
             <form>
                 <div class="haier3_input_group">
-                <label class="input" style="display: inline-block;border:none;padding-left:0;"><span style='width:70px;font-size:14px;display:inline-block;'>无线账号</span><input style="display: inline-block;min-width:52%;height:30px;border:1px solid #55879d;background:none;padding-left:10px;" type="text" required maxlength='32' placeholder="请输入无线账号" name="ssid_24g" value="<%=ssid%>" id="ssid_24g"></label>
+                <label class="input" style="display: inline-block;border:none;padding-left:0;"><span style='width:70px;font-size:14px;display:inline-block;'>无线名称</span><input style="display: inline-block;min-width:52%;height:30px;border:1px solid #55879d;background:none;padding-left:10px;" type="text" placeholder="请输入无线名称" name="ssid_24g" value="<%=ssid%>" id="ssid_24g"></label>
                 <p></p>
-                <label class="input" style="display: inline-block;border:none;padding-left:0;"><span style='width:70px;font-size:14px;display:inline-block;'>无线密码</span><input style="display: inline-block;min-width:52%;height:30px;border:1px solid #55879d;background:none;padding-left:10px;" type="text" required minlength='8' maxlength='32' placeholder="请输入无线密码" name="key_24g" id="key_24g" value="<%=key%>">
+                <label class="input" style="display: inline-block;border:none;padding-left:0;"><span style='width:70px;font-size:14px;display:inline-block;'>无线密码</span><input style="display: inline-block;min-width:52%;height:30px;border:1px solid #55879d;background:none;padding-left:10px;" type="text" placeholder="请输入无线密码" name="key_24g" id="key_24g" value="<%=key%>">
                 </div></label>
-                <p>*无线账号不能为空，重启路由器后设置生效</p>
+                <p>*无线名称不能为空，重启路由器后设置生效</p>
                 <div class="border_buttom"></div>
                 <div class="haier3_button_group">
                     <input id='subSetwifi' class="haier3_form_submit" type="button" value="确认"><a href="<%=luci.dispatcher.build_url("admin/home/mainpage")%>"><input class="haier3_form_reset" type="button" value="取消"></a>
@@ -40,19 +40,19 @@
     <script src="/luci-static/openwrt.org/jquery-3.0.0.js"></script>
     <script>
         function chpas() {//检验账号密码长度是否符合条件
-            if (arguments.length == 0) { 
-                return false;
-            };
-            for (var i =0;i< arguments.length;i++) {
-                if (arguments[i].length <8 || arguments[i].length >32) {
-                    return false;
-                }
+            if (arguments[0].length ==0 || arguments[0].length>32) {
+                return [false,"请输入32位以下长度的无线名称","#ssid_24g"]
+            }else if (arguments[1].length<8 || arguments[1].lengt>32) {
+                return [false,"请输入8到32位长度的无线密码","#key_24g"]
+            }else {
+                return [true]
             }
-            return true;
         }
         $('#subSetwifi').click(function() {
-            if (!chpas($('#ssid_24g').val(),$("#key_24g").val())) {
-                alert('请输入8到32位长度的密码')
+            var resut = chpas($('#ssid_24g').val(),$("#key_24g").val())
+            if (!resut[0]) {
+                alert(resut[1])
+                $(resut[2]).focus();
                 return;
             };
             $.post(
@@ -75,9 +75,9 @@
         function checkUp() { //检查是否重启完成若没有完成1秒钟之后再次检查,若完成跳转到登录页面
             var timer=null;
             clearTimeout(timer);
-            $.get('http://192.168.88.1/cgi-bin/luci', function(a,b,xhr) {  
+            $.get('<%=luci.dispatcher.build_url("admin/home/wifisetup")%>', function(a,b,xhr) {  
                 if (xhr.status == 200 ) {
-                    window.location.href = "http://192.168.88.1/cgi-bin/luci"
+                    window.location.href = "<%=luci.dispatcher.build_url("admin/home/wifisetup")%>"
                 }else {
                     timer = setTimeout(checkUp, 1000)
                 }

@@ -38,10 +38,24 @@
     </div>
     <script src="/luci-static/openwrt.org/jquery-3.0.0.js"></script>
     <script>
+    function chpas() {//检验ip地址是否符合规则
+        var re =  /^([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/;
+        if (!re.test(arguments[0])) {
+            return [false,"请输入正确的IP地址","#ip"]
+        }else {
+            return [true]
+        }
+    }
     $(function(){
         var IP;
         $("#subLanIPSet").click(function() {
             IP = $('#ip').val();
+            var resut = chpas(IP);
+            if (!resut[0]) {
+                alert(resut[1]);
+                $(resut[2]).focus();
+                return;
+            };
             $.post('<%=controller%>/admin/home/LanIPSet', {ip: IP}, function(data, textStatus, xhr) {
                 if (data == 'success') {
                     if (confirm("IP设置成功重启后生效,重启过程需要一分钟,请确认是否要重启:")) {
@@ -55,7 +69,7 @@
         function checkUp() { //检查是否重启完成若没有完成1秒钟之后再次检查,若完成跳转到登录页面
             var timer=null;
             clearTimeout(timer);
-            window.location.href = 'http://'+ IP +'/cgi-bin/luci'   
+            window.location.href = '<%=luci.dispatcher.build_url("admin/home/lanip")%>'   
             timer = setTimeout(checkUp, 1000)
         }
     })

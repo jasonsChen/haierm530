@@ -41,8 +41,8 @@
             
             <p class="form_p">*请设置您的无线网络信息。注意：为防止无线网络被他人盗用，请设置复杂的无线密码</p>
             <div class="haier3_input_group">
-                <input type="text" required maxlength='32' placeholder="请输入无线名称" name="ssid_24g" id="ssid_24g"/>
-                <input type="text" required minlength='8' maxlength='32' placeholder="请输入无线密码" name="key_24g" id="key_24g"/>
+                <input type="text" placeholder="请输入无线名称" name="ssid_24g" id="ssid_24g"/>
+                <input type="text" placeholder="请输入无线密码" name="key_24g" id="key_24g"/>
             </div>
             <p class="haier4_form_p form_p"><a href="<%=luci.dispatcher.build_url("admin/home/mainpage")%>"><span>详细配置</span></a></p><div style="clear: both;"></div>
             <div class="submit_round">
@@ -54,24 +54,23 @@
 <script src="/luci-static/openwrt.org/jquery-3.0.0.js"></script>
     <script>
         function chpas() {//检验账号密码长度是否符合条件
-            if (arguments.length == 0) { 
-                return false;
-            };
-            for (var i =0;i< arguments.length;i++) {
-                if (arguments[i].length <=0 || arguments[i].length >32) {
-                    return false;
-                }
+            if (arguments[0].length<=0 || arguments[0].length>32) {
+                return [false,"请输入32位以下长度的无线账号","#ssid_24g"]
+            }else if (arguments[1].length<8 || arguments[1].length>32) {
+                return [false,"请输入8到32位长度的无线密码","#key_24g"]
+            }else {
+                return [true]
             }
-            if (arguments[1].length<8) {return false};
-            return true;
         }
-        $(function() {
+        $(function() {//submit表单验证
             $('#sub').click(function() {
-                if (!chpas(
-                    $("#ssid_24g").val(),
-                    $("#key_24g").val()
-                            )) {
-                    alert('请输入8到32位长度的密码');
+                var resut = chpas(
+                                $("#ssid_24g").val(),
+                                $("#key_24g").val()
+                            )
+                if (!resut[0]) {
+                    alert(resut[1]);
+                    $(resut[2]).focus();
                     return;
                 }; 
                 $.post('<%=controller%>/admin/home/Qui_DHCP_Set', 
@@ -90,9 +89,9 @@
             function checkUp() { //检查是否重启完成若没有完成1秒钟之后再次检查,若完成跳转到登录页面
               var timer=null;
               clearTimeout(timer);
-              $.get('http://192.168.88.1/cgi-bin/luci', function(a,b,xhr) {  
+              $.get('<%=luci.dispatcher.build_url("admin/home/dynamicaddress")%>', function(a,b,xhr) {  
                   if (xhr.status == 200 ) {
-                      window.location.href = "http://192.168.88.1/cgi-bin/luci"
+                      window.location.href = "<%=luci.dispatcher.build_url("admin/home/dynamicaddress")%>"
                   }else {
                       timer = setTimeout(checkUp, 2000)
                   }

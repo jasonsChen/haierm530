@@ -1,12 +1,6 @@
-fieldset.cbi-section {
-	position: relative;
-	margin-top: 1em;
-	padding-top: 0.75em;
-	border: 1px solid #CCCCCC;
-}
+@charset "UTF8";
 
-fieldset.cbi-section legend {
-	position: absolute;
-	top: -0.75em;
-	left: 0.5em;
+html,body {
+	position: relative;
+	background: #004EA2;
 }
