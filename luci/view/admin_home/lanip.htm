@@ -58,7 +58,7 @@
             };
             $.post('<%=controller%>/admin/home/LanIPSet', {ip: IP}, function(data, textStatus, xhr) {
                 if (data == 'success') {
-                    if (confirm("IP设置成功重启后生效,重启过程需要一分钟,请确认是否要重启:")) {
+                    if (confirm("IP设置成功重启后生效,重启过程需要1分钟,请确认是否要重启:")) {
                         $.get("<%=luci.dispatcher.build_url("admin/home/Reboot")%>");
                         setTimeout(checkUp, 1*50*1000)
                         $('#textTip').text('*正在重启请稍等...') 

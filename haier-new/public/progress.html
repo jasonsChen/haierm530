@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Haier-330</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+	    html,body,div,canvas,p {padding: 0;margin: 0;}
+		html {
+			background: blue;
+		}
+		html.lt-ie9 {
+			color: #ffffff;;
+		}
+		html.lt-ie9 .progress {
+			background: blue;
+		}
+		.canvas-wrap {
+			margin: 0 auto;
+			height: 400px;
+			width: 300px;
+            padding-top: 1px;
+		}
+		.progress {
+			position: relative;
+			margin: 100px auto;
+			width: 200px;
+			height: 200px;
+            border-radius: 200px;
+            /*overflow: hidden;*/
+		}
+        html.lt-ie9 .progress h4 {
+            line-height: 200px;
+        }
+		.backdrop {
+			/*display: none;*/
+			position: absolute;
+			top:0;
+			left: 0;
+			margin: 10px;
+			width: 180px;
+			height: 180px;
+			border-radius: 180px;
+			box-sizing: border-box;
+			border: 5px solid #5c7ef8;
+			text-align: center;
+			line-height: 173px;
+			font-size: 40px;
+			z-index: 1;
+		}
+        .lt-ie9 .backdrop {
+            left: 120px;
+            font-size: 26px;
+            border: none;
+        }
+		.progress canvas {
+			position: absolute;
+			transform: rotate(-90deg);
+			top:0;
+			left: 0;
+			z-index: 2;
+		}
+	</style>
+</head>
+<body>
+<div class='canvas-wrap'>
+    <script>
+        //获取屏幕的高度和宽度，并设置div.canvas-wrap垂直位置；
+        var oClientWidth = document.documentElement.clientWidth || document.body.clientWidth,
+            oClientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+        document.querySelector('.canvas-wrap').style.marginTop = Math.floor((oClientHeight-400)/5*1) + "px";
+    </script>
+    <div class="progress">
+		<canvas id="progress" height='200' width='200'>
+			<h4 id="noCanvas">正在拼命为您加载资源 . . .</h4>
+		</canvas>
+		<p class="backdrop"><span>1</span>%</p>
+	</div>
+</div>
+<script>
+    (function () {
+        var done = 1;
+        var time = 0;
+        if (!document.querySelector('.lt-ie9')){
+            var canva = {
+                cxt: document.getElementById('progress').getContext('2d'),
+                draw: function (e) { //绘图函数
+                    canva.cxt.clearRect(0,0,200,200);
+                    canva.cxt.beginPath();
+                    canva.cxt.arc(100,100,88,0,e*2/100*Math.PI,false);
+                    canva.cxt.stroke();
+                }
+            };
+            (function canvaInit() {
+                canva.cxt.strokeStyle = '#fff';
+                canva.cxt.shadowBlur = 15;
+                canva.cxt.shadowColor = 'red';
+                canva.cxt.lineWidth = 6;
+                canva.draw(1);
+            })();
+            load(function(){
+                document.querySelector('.backdrop span').innerText = done;
+                canva.draw(done);
+            });
+        }else {
+            var h4Obj = document.getElementById('noCanvas');
+            var e = ' . . . ';
+            setInterval(function () {
+                if (e == ' . . . ') {
+                    e = ' . ';
+                }else if(e == ' . . ') {
+                    e = ' . . . ';
+                }else {
+                    e = ' . . '
+                }
+                h4Obj.innerText = '正在拼命为您加载资源' + e;
+            },300);
+            load(function(){
+                document.querySelector('.backdrop span').innerText = done;
+            })
+        }
+        function load(fn) { //加载函数曲线（用的抛物线：经过(0,0),(1,70)(2,100)三点 2秒钟加载完成） y = -20x² + 90x
+            var timer = null;
+            timer = setInterval(function() {
+                if (done < 96) { //假装加载停在96
+                    time = time + 2/100;
+                    done = -20*time*time + 90*time;
+                    done = Math.floor(done);
+                    fn();
+                }else {
+                    clearInterval(timer);
+                }
+            },2000/100)
+        }
+    })();
+</script>
+</body>
+</html>

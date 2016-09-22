@@ -412,7 +412,7 @@ function action_flashops()
 		luci.template.render("admin_system/applyreboot", {
 			title = luci.i18n.translate("Erasing..."),
 			msg   = luci.i18n.translate("The system is erasing the configuration partition now and will reboot itself when finished."),
-			addr  = "192.168.88.1"
+			addr  = "192.168.68.1"
 		})
 		fork_exec("killall dropbear uhttpd; sleep 1; mtd -r erase rootfs_data")
 	else

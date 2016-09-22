@@ -48,12 +48,12 @@
             <div class="form_p">
                 <div class="haier7_zhongji">
                     <div class="haier3_input_group">
-                        <div  class="input" style="display: inline-block;border:none;padding-left:0;"><label>网络名称
+                        <div  class="input" style="display: inline-block;border:none;padding-left:0;"><label>中继名称
                         <select id="wifiName" name="wifiName"  value="linkword"></select></label>
                         <span id="setZhongji">重新扫描</span>
                         </div>
-                        <label class="input" style="display: inline-block;border:none;padding-left:0;">网络密码
-                        <input type="password" name="netpassword"id="netpassword" style="display: inline-block;min-width:52%;height:30px;border:1px solid #55879d;background:none;"></label>
+                        <label class="input" style="display: inline-block;border:none;padding-left:0;">中继密码
+                        <input type="password" name="netpassword"id="netpassword" style="display: inline-block;min-width:52%;height:30px;border:1px solid #55879d;background:none;"><span id="tip">?</span></label>
                         <p></p>
                         <label><input type="checkbox" id="showPs">显示密码</label>
                     </div>
@@ -153,6 +153,10 @@
             $(resut[2]).focus();
             return;
         };
+		if (encryptionStr == "WEP") {//不支持WEP加密方式的WIFI
+            alert("中继不支持WEP加密方式的WIFI，请使用其他WIFI。")
+            return;
+        };
         $.post('<%=luci.dispatcher.build_url("admin/home/Rep_Set")%>',
             {
                 wifiName: $("#wifiName").val(),
@@ -191,6 +195,14 @@
         }
     });
 
+</script>
+<script src="/luci-static/openwrt.org/j.js"></script>
+<script>
+    $(function(){
+        J('#tip').click(function(){
+            J_alert("无线中继是通过用本机连接和转发其他路由器无线网络的方法,实现无线信号放大功能。请在“中继名称”里选择要连接的无线网络名称,并在“中继密码”里面输入要连接的无线网络密码。", "帮助")
+        });
+    });
 </script>
 </body> 
 </html>

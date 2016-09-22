@@ -94,6 +94,7 @@ body {
     border-bottom: 1px solid #b4c5d0;
     line-height: 31px;
     outline: none;
+    cursor: pointer;
 }
 .haier1_form {
     width: 300px;
@@ -158,6 +159,9 @@ body {
     display: -webkit-box;
     display: -webkit-flex;
     display: -webkit-box-flex;
+    padding-top: 30px;
+    padding-left: 20px;
+    box-sizing: border-box;
 }
 .haier2_information_logo {
     width: 65px;
@@ -281,6 +285,18 @@ body {
     /*background-size: 100% 100%;*/
     /*background-position: left top;*/
     padding-left: 15px;
+}
+span#tip {
+    margin-left: 8%;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #fff;
+    width: 13px;
+    height: 13px;
+    line-height: 13px;
+    border-radius: 13px;
+    box-shadow: 0 1px 5px #aaa;
 }
 
 /*haier4*/

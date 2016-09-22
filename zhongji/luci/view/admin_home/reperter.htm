@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Haier-中继器</title>
+    <script src="/luci-static/openwrt.org/jquery-3.0.0.js"></script>
+    <link rel="stylesheet" href="/luci-static/openwrt.org/base.css">
+    <link rel="stylesheet" href="/luci-static/openwrt.org/reperter.css">
+</head>
+
+<% 
+  require "luci.tools.status"
+  require "luci.version"
+  local fs = require "luci.fs"
+
+  luci.sys.exec("iwpriv apcli0 show connStatus")
+
+  local uci = require("luci.model.uci").cursor()
+
+  local lanipaddr = uci:get("network","lan","ipaddr")
+  local apcssid = uci:get_first("wireless","wifi-device","ApCliSsid")
+  local ssid = uci:get_first("wireless","wifi-iface","ssid")
+  local key = uci:get_first("wireless","wifi-iface","key")
+
+  local version = luci.version.luciversion
+
+  local linkstatus
+  local apcli = luci.util.pcdata(fs.readfile("/proc/apcli_info")) or "Disconnect"
+  --luci.sys.exec("echo apcli= %q > /tmp/tmp.log" % apcli)
+  if string.find(apcli,"Disconnect") then
+      linkstatus = "未连接"
+  else
+      linkstatus = "已连接"
+  end
+%>
+
+<body>
+    <div class="wrap">
+        <div class="haier-logo">
+            <img class="haier-logo-img" src="/luci-static/images/haier2_logo.png" alt="haierlogo">
+        </div>
+        <div class="mainbody">
+            <div class='information'>
+                <!-- <p class="span-p zhongji-status"><span class="span">中继状态</span></p> -->
+                <div class="information-logo">
+                    <img class='information-logo-img' src="/luci-static/images/haier2_information_logo.png" alt="haierlogo">
+                </div>
+                <div class="border-bottom-pc"></div>
+                <div class='information-list'>
+                    <ul class='information-list-ul'>
+                        <li>中继器版本：<%=version%></li>
+                        <li>本机IP地址：<%=lanipaddr%></li>
+                        <li>本机无线名称：<%=ssid%></li>
+                        <li id="apcssid">中继名称：<%=apcssid%></li>
+                        <li>中继状态：<%=linkstatus%></li>
+                    </ul>
+                </div>
+            </div>
+            <div class ="border-bottom" ></div>
+            <div class="menu">
+                <!-- <p class="span-p"><span class="span">中继设置</span></p> -->
+                <form onsubmit="return false">
+                    <div class="input_group">
+                        <label>中继名称
+                            <select id="wifiName" name="wifiName"  value="linkword"></select>
+                        </label>
+                        <a href="javascript:;"><span id="setZhongji">重新扫描</span></a>
+                    </div>
+                    <div class="input_group">
+                        <label>中继密码
+                            <input type="password" name="netpassword" id="netpassword"></label><span id="tip">?</span>
+                        <p></p>
+                        <label><input type="checkbox" id="showPs">显示密码</label>
+                    </div>
+                    </br>
+                    <p class="checkbox-p"><input type="checkbox" id="setPas" checked>*本地无线的名称和密码与目标无线网络一致</p>
+                    <div class="wifi" id="pas">
+                        <span>手工输入WIFI名称和密码</span>
+                        <input type="text" placeholder="请输入无线名称" name="ssid_24g"  id="ssid_24g"/>
+                        <input type="password" placeholder="请输入无线密码" name="key_24g" id="key_24g"/>
+                    </div>
+                    <div>
+                        <p>&nbsp;<label id="wifi_scan" style="margin-right:5px"></label><label id="connectError" style="margin-right:5px"></label></p>
+                    </div>
+                    <p class="link-p"><a href="<%=luci.dispatcher.build_url("admin/home/mainpage")%>">设备管理</a><br style="clear: both;"/></p>
+                    <div class="submit_round">
+                        <input class="submit_round_main" id="connect" type="submit" value="确认" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+    // 如果中继名称过长则中间显示省略号
+    (function () {
+        var ssidStr = $("#apcssid").text();
+        var sL =ssidStr.length;
+        if (sL > 22) {
+           ssidStr = "中继名称：" + ssidStr.substr(5,3) + "....."  + ssidStr.substr(sL-3);
+           $("#apcssid").text(ssidStr);
+        };
+    })();
+    var currWifi;//用于保存扫描到的所有wifi
+    function chpas() {//检验账号密码长度是否符合条件
+        if (!arguments[0]) {
+            return [false,"请选择可用的WIFI"]
+        }else {
+            if(arguments[2].length<=0 || arguments[2].length>32) {
+                return [false,"请输入32位以下长度的无线名称","#ssid_24g"]
+            }else if (arguments[3].length<8 || arguments[3].length>32) {
+                return [false,"请输入8到32位长度的无线密码","#key_24g"]
+            }else {
+                return [true]
+            }
+        }
+    }
+    $(wifi_scan);
+    $("#setZhongji").click(function(){wifi_scan()});
+    function wifi_scan() { //扫描wifi
+        var errorTimeout = null;
+        if (errorTimeout) {clearTimeout(errorTimeout)};
+        errorTimeout = setTimeout(function(){
+            $("#wifi_scan").text("扫描失败").css('color', 'red');
+        },5000);
+        $.get('<%=luci.dispatcher.build_url("admin", "home")%>/wifiScan', function(data) {
+            if (!!data) {
+                currWifi = data //将扫到的所有wifi保存到全局变量currWifi
+                clearTimeout(errorTimeout)
+            };
+            var wifiList;
+            for(var i = 0;i<data.length;i++) {
+                wifiList += "<option " + "id=option" + i + " value='"+data[i].ssid+"'>"+data[i].ssid+"</option>"
+            }
+            $("#wifiName").html(wifiList);
+            var maxSignal = data[0].signal;
+            for(var i=0;i<data.length;i++) {
+                if (maxSignal<data[i].signal) maxSignal = data[i].signal;
+            }
+            for(var i=0;i<data.length;i++) {
+                if (maxSignal=data[i].signal) $("#option" + i).attr('selected', 'selected');;
+            }
+            $("#wifi_scan").text("").css('color', '#266783');
+        });
+    }
+    $("#connect").click(function() {
+        connect(currWifi);
+    });
+    function connect(e) {
+        var bssidStr = "",encryptionStr = "",channelStr = "",groupCiphersStr = "";
+        if ($("#wifi_scan").text() == "扫描失败"|| typeof(e) == "undefined") { //确认当前已经扫描到了wifi
+            $("#wifi_scan").text("没有扫描到WIFI,请点击重新扫描后重试").css("color","red")
+            return;
+        };
+        for (var i = 0;i < e.length;i++) {     //遍历出当前的wifi
+            if (e[i].ssid == $("#wifiName").val()) {
+                //保存当前wifi的信息用于发送登录请求
+                bssidStr = e[i].bssid;
+                if (e[i].encryption.wep) {
+                    encryptionStr = "WEP";
+                }else if(e[i].encryption.wpa>0) {
+                    if (e[i].encryption.wpa ==2||e[i].encryption.wpa==3) {
+                        encryptionStr = "WPA2" + e[i].encryption.auth_suites.join("")
+                    }else {
+                        encryptionStr = "WPA" + e[i].encryption.auth_suites.join("")
+                    }
+                }else if (e[i].encryption.enabled) {
+                    encryptionStr = "UNKNOWN";
+                }else {
+                    encryptionStr = "OPEN";
+                }
+                channelStr = e[i].channel;
+                if (typeof(e[i].encryption.group_ciphers) == "undefined" || e[i].encryption.group_ciphers == "") {
+                    if (e[i].encryption.wep) {
+                        groupCiphersStr = "WEP";
+                    }else {
+                        groupCiphersStr = "";
+                    }
+                }else if (e[i].encryption.group_ciphers instanceof Array) {
+                    groupCiphersStr = e[i].encryption.group_ciphers.join("");
+                };
+            };
+        }
+        //发送前的验证
+        if ($("#setPas")[0].checked && ($("#netpassword").val().length <8 || $("#netpassword").val().length >32)){
+            alert("本机密码必须为8到32位请手工输入");
+            $("#setPas").click();
+            return;
+        }
+        var resut = chpas($("#wifiName").val(),$("#netpassword").val(),$("#ssid_24g").val(),$("#key_24g").val());
+        if (encryptionStr != "OPEN") {
+            resut = (!$("#netpassword").val()) ? [false,"当前WIFI需要输入正确的中继密码","#netpassword"] :resut;
+        };
+        if (!resut[0]) {
+            alert(resut[1]);
+            if (resut[2]) {
+                $(resut[2]).focus();
+            };
+            return;
+        };
+        if (encryptionStr == "WEP") {//不支持WEP加密方式的WIFI
+            alert("路由器不支持WEP加密方式的WIFI，请使用其他WIFI。")
+            return;
+        };
+        $.post('<%=luci.dispatcher.build_url("admin/home/Qui_REP_Set")%>',
+            {
+                wifiName: $("#wifiName").val(),
+                netpassword: $("#netpassword").val(),
+                bssid: bssidStr,
+                encryption: encryptionStr,
+                channel: channelStr,
+                groupCiphers: groupCiphersStr,
+                ssid_24g: $("#ssid_24g").val(),
+                key_24g: $("#key_24g").val(),
+            },
+            function(data, textStatus, xhr) {
+                if (data == 'success') {
+                    if (confirm('设置成功,重启后才能生效,重启过程大概需要1分钟,确认是否现在重启')) {
+                        $.get("<%=luci.dispatcher.build_url("admin/home/Reboot")%>");
+                        setTimeout(checkUp, 1*50*1000);
+                    };
+                };
+        });
+    }
+    $("#showPs").click(function() {
+        if (this.checked) {
+            $("#netpassword").attr('type', 'text');
+            $("#key_24g").attr('type', 'text');
+        }else {
+            $("#netpassword").attr('type', 'password');
+            $("#key_24g").attr('type', 'password');
+        }
+    });
+    $("#netpassword").bind('input propertychange', function() {
+        $("#ssid_24g").val($("#wifiName").val());
+        $("#key_24g").val($("#netpassword").val());
+    });
+    $("#wifiName").bind('input propertychange', function() {
+        $("#ssid_24g").val($("#wifiName").val());
+        $("#key_24g").val($("#netpassword").val());
+    });
+    $("#setPas").click(function() {
+        if (!this.checked) {
+            $("#pas").css('opacity', '1');
+            $("#ssid_24g").val('').attr({placeholder: '本机无线名称：<%=ssid%>'});
+            $("#key_24g").val('').attr({placeholder: '本机无线密码：<%=key%>'});
+            $("#netpassword").unbind();
+            $("#wifiName").unbind();
+        }else {
+            $("#pas").css('opacity', '0');
+            $("#ssid_24g").val($("#wifiName").val());
+            $("#key_24g").val($("#netpassword").val());
+            $("#netpassword").bind('input propertychange', function() {
+                $("#key_24g").val($("#netpassword").val());
+                $("#ssid_24g").val($("#wifiName").val());
+            });
+            $("#wifiName").bind('input propertychange', function() {
+                $("#key_24g").val($("#netpassword").val());
+                $("#ssid_24g").val($("#wifiName").val());
+            });
+        };
+    });
+    function checkUp() { //检查是否重启完成若没有完成1秒钟之后再次检查,若完成跳转到登录页面
+              var timer=null;
+              clearTimeout(timer);
+              $.get("<%=luci.dispatcher.build_url("admin/home/reperter")%>", function(a,b,xhr) {  
+                  if (xhr.status == 200 ) {
+                      window.location.href = "<%=luci.dispatcher.build_url("admin/home/reperter")%>"
+                  }else {
+                      timer = setTimeout(checkUp, 2000)
+                  }
+              });
+            }
+</script>
+<script src="/luci-static/openwrt.org/j.js"></script>
+<script>
+    $(function(){
+        J('#tip').click(function(){
+            J_alert("无线中继是通过用本机连接和转发其他路由器无线网络的方法,实现无线信号放大功能。请在\“中继名称\”里选择要连接的无线网络名称,并在\“中继密码\”里面输入需要连接网络的密码。")
+        });
+    });
+</script>
+</body>
+</html>

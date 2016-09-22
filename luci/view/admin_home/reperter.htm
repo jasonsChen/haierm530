@@ -66,12 +66,12 @@
             <div class="form_p">
                 <div class="haier7_zhongji">
                     <div class="haier3_input_group">
-                        <div  class="input" style="display: inline-block;border:none;padding-left:0;"><label>网络名称
+                        <div  class="input" style="display: inline-block;border:none;padding-left:0;"><label>中继名称
                         <select id="wifiName" name="wifiName"  value="linkword"></select></label>
                         <span id="setZhongji">重新扫描</span>
                         </div>
-                        <label class="input" style="display: inline-block;border:none;padding-left:0;">网络密码
-                        <input type="password" name="netpassword"id="netpassword"></label>
+                        <label class="input" style="display: inline-block;border:none;padding-left:0;">中继密码
+                        <input type="password" name="netpassword"id="netpassword"><span id="tip">?</span></label>
                         <p></p>
                         <label><input type="checkbox" id="showPs">显示密码</label>
                     </div>
@@ -81,7 +81,7 @@
                 </div>
             </div>
 
-            <label><input type="checkbox" id="setPas" checked>*无线网络的名称和密码与目标路由器一致</label>
+            <label><input type="checkbox" id="setPas" checked>*本地无线的名称和密码与目标无线网络一致</label>
             <div class="haier3_input_group" id='pas'>
                 <br>
                 <p class='form_p' style='text-align:center;'>手工输入WIFI名称和密码</p>
@@ -99,16 +99,8 @@
     function chpas() {//检验账号密码长度是否符合条件
         if (!arguments[0]) {
             return [false,"请选择可用的WIFI"]
-        }else if ($("#setPas")[0].checked) {
-            if(arguments[1].length<=0) {
-                return [false,"请输入正确的网络密码","#netpassword"]
-            }else{
-                return [true]
-            }    
         }else {
-            if(arguments[1].length<=0) {
-                return [false,"请输入正确的网络密码","#netpassword"]
-            }else if (arguments[2].length<=0 || arguments[2].length>32) {
+            if(arguments[2].length<=0 || arguments[2].length>32) {
                 return [false,"请输入32位以下长度的无线名称","#ssid_24g"]
             }else if (arguments[3].length<8 || arguments[3].length>32) {
                 return [false,"请输入8到32位长度的无线密码","#key_24g"]
@@ -187,7 +179,15 @@
             };
         }
         //发送前的验证
+       if ($("#setPas")[0].checked && ($("#netpassword").val().length <8 || $("#netpassword").val().length >32)){
+            alert("本机密码必须为8到32位请手工输入");
+            $("#setPas").click();
+            return;
+        }
         var resut = chpas($("#wifiName").val(),$("#netpassword").val(),$("#ssid_24g").val(),$("#key_24g").val());
+        if (encryptionStr != "OPEN") {
+            resut = (!$("#netpassword").val()) ? [false,"当前WIFI需要输入正确的中继密码","#netpassword"] :resut;
+        };
         if (!resut[0]) {
             alert(resut[1]);
             if (resut[2]) {
@@ -196,7 +196,7 @@
             return;
         };
         if (encryptionStr == "WEP") {//不支持WEP加密方式的WIFI
-            alert("路由器不支持WEP加密方式的WIFI，请使用其他WIFI。")
+            alert("中继不支持WEP加密方式的WIFI，请使用其他WIFI。")
             return;
         };
         $.post('<%=luci.dispatcher.build_url("admin/home/Qui_REP_Set")%>',  //数据无误发送POST请求
@@ -266,6 +266,14 @@
                   }
               });
             }
+</script>
+<script src="/luci-static/openwrt.org/j.js"></script>
+<script>
+    $(function(){
+        J('#tip').click(function(){
+            J_alert("无线中继是通过用本机连接和转发其他路由器无线网络的方法,实现无线信号放大功能。请在“中继名称”里选择要连接的无线网络名称,并在“中继密码”里面输入要连接的无线网络密码。", "帮助")
+        });
+    });
 </script>
 </body> 
 </html>

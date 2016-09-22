@@ -1,0 +1,64 @@
+@charset "UTF-8";
+
+.side h3 {
+    color: #266883;
+    margin-top: 16px;
+    margin-bottom: 5px;
+}
+ul {
+    list-style: none;
+    color: #266883;
+    margin-top: 5px;
+}
+li {
+    background: url("../images/haier4_list_bg.png");
+    border-right: 1px solid #ffffff;
+}
+#active a {
+    background: #266783;
+    color: #ffffff;
+}
+@media (min-width: 901px) {
+    .side {
+        text-align: center;
+    }
+    .side h3 {
+        margin: 60px 0;
+    }
+    .side ul {
+        margin: 50px 0;
+    }
+    .side li {
+        height: 35px;
+        line-height: 35px;
+        margin: 20px 0;
+    }
+}
+html.lt-ie9 .side{
+    text-align: center;
+}
+html.lt-ie9 .side h3 {
+    margin: 60px 0 20px;
+}
+html.lt-ie9 .side ul {
+    margin: 50px 0;
+}
+html.lt-ie9 .side li {
+    height: 35px;
+    line-height: 35px;
+    margin: 20px 0;
+}
+@media (max-width: 900px) {
+    li {
+        display: inline-block;
+        box-sizing: border-box;
+        width: 25%;
+        height: 1.5rem;
+        line-height: 1.5rem;
+        text-align: center;
+    }
+}
+
+.input-group {
+    margin: 10px 0;
+}

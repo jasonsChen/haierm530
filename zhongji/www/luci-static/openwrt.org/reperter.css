@@ -45,6 +45,7 @@ form {
     text-align: center;
     background: none;
     color: #266883;	
+    cursor: pointer;
 }
 .link-p {
 	text-align: right;

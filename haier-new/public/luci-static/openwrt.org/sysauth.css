@@ -1,0 +1,102 @@
+@charset "UTF-8";
+html,body,p,img,div,span,form,input,select,h1,h2,h3,h4 {margin: 0;padding: 0;}
+html {
+    background: blue;
+}
+body {
+    font-size: 14px;
+    font-family: "Microsoft YaHei";
+}
+.wrap {
+    width: 17rem;
+    margin: 0 auto;
+    text-align: center;
+}
+.logo {
+    width: 11rem;
+    margin: 6rem 2rem 1rem;
+}
+.welcom {
+    color: #ffffff;
+}
+form {
+    background: #d2d4db;
+    height: 11rem;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 2px solid #ffffff;
+    color: #266883;
+    margin-top: 2rem;
+    padding: 1rem;
+}
+input {
+    box-sizing: border-box;
+    width: 100%;
+    height: 1.5rem;
+    margin: .8rem 0;
+    background: none;
+    border: 1px solid #b4c5d0;
+    color: #266883;
+}
+html {
+
+}
+#password {
+    padding-left: 1.5rem;
+}
+.form-caption {
+    margin-top: .8rem;
+    text-align: left;
+    font-size: 16px;
+}
+.input-group {
+    position: relative;
+}
+.input-group .left {
+    position: absolute;
+    width: 1.5rem;
+    left: 0;
+    top: 0.8rem;
+}
+.input-group .right {
+    background: #D2D4DB;
+    position: absolute;
+    width: 1.5rem;
+    right: 3px;
+    top: 0.9rem;
+}
+/*
+ *兼容IE9以下
+ */
+html.lt-ie9 .wrap {
+    width: 330px;
+}
+html.lt-ie9 .logo {
+    width: 220px;
+    margin: 120px 40px 20px;
+}
+html.lt-ie9 form {
+    height: 220px;
+    margin-top: 40px;
+    padding: 20px;
+}
+html.lt-ie9 input {
+    height: 30px;
+    margin: 16px 0;
+}
+html.lt-ie9 #password {
+    padding-left: 30px;
+    line-height: 28px;
+}
+html.lt-ie9 .form-caption {
+    margin-top: 16px;
+}
+html.lt-ie9 .input-group .left {
+    width: 30px;
+    top: 18px;
+}
+html.lt-ie9 .input-group .right {
+    z-index: -1;
+    width: 30px;
+    top: 18px;
+}

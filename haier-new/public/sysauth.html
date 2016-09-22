@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en"  class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en"  class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en"  class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en"  class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+    <title>sysauth</title>
+    <script>
+        (function () {
+            window.oClientWidth = document.documentElement.clientWidth || document.body.clientWidth;
+            window.oClientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+//设值根目录字体大小
+            document.querySelector('html').style.fontSize = oClientWidth / 414 * 20 + 'px';
+            if (parseInt(document.querySelector('html').style.fontSize) > 22) {
+                document.querySelector('html').style.fontSize = 22 + 'px';
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="luci-static/openwrt.org/sysauth.css">
+</head>
+<body bgcolor="blue">
+    <div class="wrap">
+        <img class="logo" src="luci-static/images/haier1_logo_01.png" alt="logo">
+        <h3 class="welcom">欢迎使用智能云路由器</h3>
+        <form method="post" action="/cgi-bin/luci" autocomplete="off">
+            <p class="form-caption">管理密码</p>
+            <input type="text" style="display: none" value="admin" name="username">
+            <div class="input-group">
+                <img class="left" src="luci-static/images/haier1_form_img.png" alt="">
+                <input id="password" name="password"  type="password" placeholder="请输入密码（默认admin）">
+                <img class="right" id="btn" src="luci-static/images/haier1_02_03.png" alt="">
+            </div>
+            <input type="submit" value="确定">
+        </form>
+    </div>
+<script src="luci-static/openwrt.org/base.js"></script>
+<script src="luci-static/openwrt.org/main.js"></script>
+<script>
+    showPassword('#btn','#password')
+</script>
+</body>
+</html>

@@ -92,6 +92,7 @@ body {
     border-right: 1px solid #b4c5d0;
     border-top: 1px solid #b4c5d0;
     border-bottom: 1px solid #b4c5d0;
+    cursor: pointer;
 }
 .haier1_form {
     width: 300px;

@@ -11,11 +11,6 @@
     <script src="js/html5shiv.min.js"></script>
     <script src="js/respond.min.js"></script>
     <![endif]-->
-    <script>
-        var lin = document.createElement("link");
-        lin.src= "/luci-static/openwrt.org/ie8.css"
-        head.appendChild(lin)
-    </script>
     <script src="/luci-static/openwrt.org/jquery-3.0.0.js"></script>
     <title></title>
     <style>
@@ -43,9 +38,9 @@
 
   local linkstatus
   if wanip then
-    linkstatus = "连接正常"
+    linkstatus = "网络正常"
   else
-    linkstatus = "连接异常"
+    linkstatus = "网络异常"
   end
 
   local wan_mode = uci:get("network","wan","mode") or "dhcp"
@@ -131,7 +126,7 @@
             });
             function anim(e) {
                 var strArr1 = ["无线设置","上网设置","本地设置","在线终端","快速设置"],
-                    strArr2 = ["修改密码","固件升级","重启设备","恢复出厂","退出登录"];
+                    strArr2 = ["管理密码","固件升级","重启设备","恢复出厂","退出登录"];
                 var aUrl1 = ["<%=luci.dispatcher.build_url("admin/home/wifisetup")%>","<%=wan_url%>","<%=luci.dispatcher.build_url("admin/home/lanip")%>","<%=luci.dispatcher.build_url("admin/home/phoneonline")%>","<%=luci.dispatcher.build_url("admin")%>"],
                     aUrl2 = ["<%=luci.dispatcher.build_url("admin/home/setpassword")%>","<%=luci.dispatcher.build_url("admin/home/upgrade")%>","#","#","/cgi-bin/luci"];                
                 $("#listUL .haier2_menu_list2").each(function(i){

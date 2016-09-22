@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en"  class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en"  class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en"  class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--><html lang="en" class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <title>quicksetup</title>
+    <script>
+        (function () {
+            window.oClientWidth = document.documentElement.clientWidth || document.body.clientWidth;
+            window.oClientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+//设值根目录字体大小
+            document.querySelector('html').style.fontSize = oClientWidth / 414 * 20 + 'px';
+            if (parseInt(document.querySelector('html').style.fontSize) > 22) {
+                document.querySelector('html').style.fontSize = 22 + 'px';
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="luci-static/openwrt.org/base.css">
+    <link rel="stylesheet" href="luci-static/openwrt.org/dynamicaddress.css">
+</head>
+<body background="luci-static/images/haier2_body_bg.png" bgcolor="#D3D4D6">
+<div class="wrap">
+    <img class="logo" src="luci-static/images/haier2_logo.png" alt="logo">
+    <div class="content">
+        <div class="side">
+            <h3>快速设置</h3>
+            <div class="underline"></div>
+            <ul>
+                <li id="active"><a href="<%=luci.dispatcher.build_url("admin/home/quicksetup")%>">宽带拨号</a></li><li><a href="<%=luci.dispatcher.build_url("admin/home/staticaddress")%>">静态IP</a></li><li><a href="<%=luci.dispatcher.build_url("admin/home/dynamicaddress")%>">动态IP</a></li><li><a
+                    href="<%=luci.dispatcher.build_url("admin/home/reperter")%>">无线中继</a></li>
+            </ul>
+        </div>
+        <div class="main">
+            <form action="" autocomplete="off">
+                <p>*请输入运营商给您的宽带上网账号及密码,如有遗忘,可拨打运营商电话找回</p>
+                <div class="input-group">
+                    <input type="text" placeholder="请输入宽带上网帐号" name="account" class="form-control" id="account"/>
+                    <input type="text" placeholder="请输入宽带上网密码" name="password" class="form-control" id="password"/>
+                </div>
+                <p>*请设置您的无线网络信息。注意:为防止无线网络被他人盗用,请设置复杂的无线密码</p>
+                <div class="input-group">
+                    <input type="text" placeholder="请输入无线名称" name="ssid_24g" id="ssid_24g"/>
+                    <input type="text" placeholder="请输入无线密码" name="key_24g" id="key_24g" />
+                </div>
+                <p class="config"><a href="<%=luci.dispatcher.build_url("admin/home/mainpage")%>">详细配置</a></p>
+                <div class="submit_round">
+                    <input class="submit_round" id="sub" type="submit" value="确认" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="luci-static/openwrt.org/base.js"></script>
+<script src="luci-static/openwrt.org/main.js"></script>
+</body>
+</html>

@@ -91,6 +91,7 @@ body {
     border-right: 1px solid #b4c5d0;
     border-top: 1px solid #b4c5d0;
     border-bottom: 1px solid #b4c5d0;
+    cursor: pointer;
 }
 .haier1_form {
     width: 300px;
@@ -101,6 +102,7 @@ body {
     width: 288px;
     height: 30px;
     border-right: 1px solid #b4c5d0;
+    cursor: pointer;
 }
 
 .haier2_wrap {

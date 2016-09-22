@@ -1,0 +1,173 @@
+@charset "UTF-8";
+
+html,body,p,img,div,span,form,input,select,h1,h2,h3,h4,ul,li,a {margin: 0;padding: 0;}
+input {border: none;background: none;}
+p {margin-top: 5px;margin-bottom: 7px;font-size: 13px}
+a {text-decoration: none;color: #266883;display: block;height: 100%;width: 100%;}
+a:active {font-size: 13px;font-weight: bold;}
+body {
+    font-size: 13px;
+    font-family: "Microsoft YaHei";
+    background-attachment: fixed;
+}
+@media (max-width:400px) {
+    body {
+        font-size:12px;
+    }
+}
+.wrap {
+    width: 900px;
+    margin: 100px auto;
+}
+.content {
+    color: #266883;
+    box-sizing: border-box;
+    padding: 22px;
+    height: 500px;
+    background: url("../images/haier2_wrap_bg-pc.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+@media (max-width:400px) {
+    .content {
+        padding: 9px;
+    }
+}
+.underline {
+    border-bottom: 1px solid #266883;
+    border-top: 1px solid #fff;
+}
+.input-group input {
+    box-sizing: border-box;
+    width: 100%;
+    height: 28px;
+    line-height: 28px;
+    padding-left: 10px;
+    margin-top: 10px;
+    border: 1px solid #55879d;
+}
+.input-inline-group {
+    margin-top: 10px;
+}
+html.lt-ie9 .input-inline-group button {
+    line-height: 30px;
+}
+.input-inline-group label {
+    box-sizing: border-box;
+    display: inline-block;
+    width: 20%;
+}
+.input-inline-group input,.input-inline-group select {
+    box-sizing: border-box;
+    display: inline-block;
+    width: 52%;
+    height: 30px;
+    margin: 8px 1%;
+    border: 1px solid #266783;
+    padding-left: 10px;
+}
+.input-inline-group button {
+    box-sizing: border-box;
+    width: 24%;
+    height: 30px;
+    font-size: 12px;
+    box-shadow: inset 0 1px 0 rgba(256, 256, 256, 0.55), 1px 1px 3px rgba(0, 0, 0, .25);
+}
+html.lt-ie9 .help {
+    vertical-align: middle;
+}
+.config {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    text-align: right;
+
+}
+.config a {
+    display: inline;
+}
+div.submit_round {
+    text-align: center;
+}
+input.submit_round {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    border-radius: 25px;
+    border-top: 2px solid #acbdcd;
+    border-bottom: 2px solid #acbdcd;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    color: #266783;
+    outline: none;
+}
+html.lt-ie9 input.submit_round{
+    border: none;
+    background: url("../images/submit_round.png");
+}
+input.submit_round:active {
+    font-weight: bold;
+}
+
+.side, .main {
+    box-sizing: border-box;
+    height: 450px;
+}
+.side {
+    float: left;
+    width: 300px;
+}
+.main {
+    float: left;
+    width: 546px;
+    padding: 30px;
+    margin-left: 10px;
+    border-left: 2px solid #fff;
+}
+@media (max-width: 900px) {
+    .logo {
+        width: 3rem;
+    }
+    .wrap {
+        width: 19.5rem;
+        height: 29rem;
+        margin: 3rem auto;
+    }
+    .content {
+        margin-top: .5rem;
+        min-height: 560px;
+        background: url("../images/haier2_wrap_bg.png");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+    .side {
+        float: none;
+        width: auto;
+        height: auto;
+        padding: 0;
+    }
+    .main {
+        float: none;
+        width: auto;
+        height: auto;
+        border: none;
+        padding: 0;
+    }
+}
+/*
+ *main.js中显示和隐藏dom的css
+ */
+
+.transi {
+    transition: all 1s;
+    -moz-transition: all 1s;
+    -webkit-transition: all 1s;
+    -o-transition: all 1s;
+}
+.transf {
+    transform: scale(0,0);
+    -moz-transform: scale(0,0);
+    -webkit-transform: scale(0,0);
+    -o-transform: scale(0,0);
+}

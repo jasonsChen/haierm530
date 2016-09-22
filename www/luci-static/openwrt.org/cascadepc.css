@@ -91,6 +91,7 @@ body {
     border-right: 1px solid #b4c5d0;
     border-top: 1px solid #b4c5d0;
     border-bottom: 1px solid #b4c5d0;
+    cursor: pointer;
 }
 .haier1_form {
     width: 300px;
@@ -101,6 +102,7 @@ body {
     width: 288px;
     height: 30px;
     border-right: 1px solid #b4c5d0;
+    cursor: pointer;
 }
 
 .haier2_wrap {
@@ -181,6 +183,7 @@ body {
     border: 1px solid #55879d;
     background: none;
     color: #55879d;
+    cursor: pointer;
 }
 .haier3_form_reset {
     float: right;
@@ -190,7 +193,22 @@ body {
     border: 1px solid #55879d;
     background: none;
     color: #55879d;
+    cursor: pointer;
 }
+span#tip {
+    margin-left: 5%;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #fff;
+    width: 13px;
+    height: 13px;
+    line-height: 13px;
+    border-radius: 13px;
+    box-shadow: 0 1px 5px #aaa;
+    cursor: pointer;
+}
+
 .form_p {
     font-size: 15px;
     margin-top: 5px;
@@ -210,6 +228,7 @@ body {
     border-radius: 25px;
     text-align: center;
     background: none;
+    cursor: pointer;
 }
 #setZhongji {
 	cursor: pointer;
